@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS merch_shop.users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    balance INTEGER NOT NULL DEFAULT 0 CHECK (balance >= 0),
+    balance BIGINT NOT NULL DEFAULT 0 CHECK (balance >= 0),
     created_at TIMESTAMP NOT NULL DEFAULT now(),
 );
 
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS merch_shop.transfers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     from_user_id UUID NOT NULL,
     to_user_id UUID NOT NULL,
-    amount INTEGER NOT NULL,
+    amount BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
 );
 

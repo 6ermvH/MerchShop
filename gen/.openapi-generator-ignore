@@ -1,0 +1,12 @@
+main.go
+Dockerfile
+README.md
+go.mod
+go.sum
+api/openapi.yaml
+
+**/main.go
+**/Dockerfile
+**/README.md
+**/go.mod
+**/go.sum
