@@ -1,0 +1,22 @@
+version: "2"
+
+run:
+  timeout: 1m
+  relative-path-mode: gomod
+  concurrency: 4
+
+linters:
+  enable-all: true
+  exclusions:
+    paths:
+      - "gen/openapi/"
+
+formatters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines
+  exclusions:
+    paths:
+      - "gen/openapi/"
