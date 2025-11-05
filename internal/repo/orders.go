@@ -20,7 +20,11 @@ func (r *OrdersRepo) runner(ctx context.Context) Runner {
 	return r.db
 }
 
-func (r *OrdersRepo) Create(ctx context.Context, userId, productId uuid.UUID, count int32) (model.Order, error) {
+func (r *OrdersRepo) Create(
+	ctx context.Context,
+	userId, productId uuid.UUID,
+	count int32,
+) (model.Order, error) {
 	q := r.runner(ctx)
 	var o model.Order
 	err := q.QueryRow(ctx, `

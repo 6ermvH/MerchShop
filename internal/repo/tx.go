@@ -48,7 +48,11 @@ type TxOptions struct {
 	AttemptTimeout time.Duration
 }
 
-func (r *Repo) WithTx(ctx context.Context, fn func(txCtx context.Context) error, opts *TxOptions) error {
+func (r *Repo) WithTx(
+	ctx context.Context,
+	fn func(txCtx context.Context) error,
+	opts *TxOptions,
+) error {
 	level := pgx.ReadCommitted
 	retries := 5
 	timeout := time.Duration(0)

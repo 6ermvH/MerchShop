@@ -20,7 +20,11 @@ func (r *TransfersRepo) runner(ctx context.Context) Runner {
 	return r.db
 }
 
-func (r *TransfersRepo) Create(ctx context.Context, fromID, toID uuid.UUID, amount int64) (model.Transfer, error) {
+func (r *TransfersRepo) Create(
+	ctx context.Context,
+	fromID, toID uuid.UUID,
+	amount int64,
+) (model.Transfer, error) {
 	q := r.runner(ctx)
 	var t model.Transfer
 	err := q.QueryRow(ctx, `

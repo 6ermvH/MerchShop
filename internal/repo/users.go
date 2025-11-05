@@ -58,7 +58,11 @@ func (r *UsersRepo) FindByUsername(ctx context.Context, username string) (model.
 	return u, nil
 }
 
-func (r *UsersRepo) UpdateBalance(ctx context.Context, userId uuid.UUID, newBalance int64) (model.User, error) {
+func (r *UsersRepo) UpdateBalance(
+	ctx context.Context,
+	userId uuid.UUID,
+	newBalance int64,
+) (model.User, error) {
 	q := r.runner(ctx)
 	var u model.User
 	err := q.QueryRow(ctx, `
@@ -76,7 +80,11 @@ func (r *UsersRepo) UpdateBalance(ctx context.Context, userId uuid.UUID, newBala
 	return u, nil
 }
 
-func (r *UsersRepo) AddToBalance(ctx context.Context, userId uuid.UUID, delta int64) (model.User, error) {
+func (r *UsersRepo) AddToBalance(
+	ctx context.Context,
+	userId uuid.UUID,
+	delta int64,
+) (model.User, error) {
 	q := r.runner(ctx)
 
 	var cur int64

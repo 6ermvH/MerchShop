@@ -28,7 +28,12 @@ func (r *Repo) SendCoins(ctx context.Context, fromUserId, toUserId uuid.UUID, am
 	}, &TxOptions{Level: pgx.Serializable, MaxRetries: 10})
 }
 
-func (r *Repo) BuyProduct(ctx context.Context, userId uuid.UUID, productTitle string, count int32) error {
+func (r *Repo) BuyProduct(
+	ctx context.Context,
+	userId uuid.UUID,
+	productTitle string,
+	count int32,
+) error {
 	if count <= 0 {
 		return fmt.Errorf("count must be positive")
 	}
