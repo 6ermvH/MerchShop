@@ -57,9 +57,7 @@ func (r *Repo) WithTx(
 	retries := 5
 	timeout := time.Duration(0)
 	if opts != nil {
-		if opts.Level != 0 {
-			level = opts.Level
-		}
+		level = opts.Level
 		if opts.MaxRetries > 0 {
 			retries = opts.MaxRetries
 		}
