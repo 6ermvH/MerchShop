@@ -7,9 +7,11 @@ import (
 )
 
 type User struct {
-	ID        uuid.UUID `db:"id"         json:"id"`
-	Balance   int64     `db:"balance"    json:"balance"`
-	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	ID           uuid.UUID `db:"id"            json:"id"`
+	Balance      int64     `db:"balance"       json:"balance"`
+	Username     string    `db:"username"      json:"username"`
+	PasswordHash string    `db:"password_hash" json:"password_hash"`
+	CreatedAt    time.Time `db:"created_at"    json:"created_at"`
 }
 
 type Transfer struct {
@@ -21,10 +23,13 @@ type Transfer struct {
 }
 
 type Order struct {
-	ID        uuid.UUID `db:"id"         json:"id"`
-	UserID    uuid.UUID `db:"user_id"    json:"user_id"`
-	ProductID uuid.UUID `db:"product_id" json:"product_id"`
-	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	ID           uuid.UUID `db:"id"         json:"id"`
+	Count        int32
+	UserID       uuid.UUID `db:"user_id"    json:"user_id"`
+	ProductID    uuid.UUID `db:"product_id" json:"product_id"`
+	ProductTitle string
+	ProductPrice int64
+	CreatedAt    time.Time `db:"created_at" json:"created_at"`
 }
 
 type Product struct {
