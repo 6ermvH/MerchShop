@@ -1,4 +1,4 @@
-package hash
+package hasher
 
 import "golang.org/x/crypto/bcrypt"
 
