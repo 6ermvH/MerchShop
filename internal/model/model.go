@@ -15,11 +15,13 @@ type User struct {
 }
 
 type Transfer struct {
-	ID         uuid.UUID `db:"id"           json:"id"`
-	FromUserID uuid.UUID `db:"from_user_id" json:"from_user_id"`
-	ToUserID   uuid.UUID `db:"to_user_id"   json:"to_user_id"`
-	Amount     int64     `db:"amount"       json:"amount"`
-	CreatedAt  time.Time `db:"created_at"   json:"created_at"`
+	ID           uuid.UUID `db:"id"           json:"id"`
+	FromUserID   uuid.UUID `db:"from_user_id" json:"from_user_id"`
+	FromUserName string
+	ToUserID     uuid.UUID `db:"to_user_id"   json:"to_user_id"`
+	ToUserName   string
+	Amount       int64     `db:"amount"       json:"amount"`
+	CreatedAt    time.Time `db:"created_at"   json:"created_at"`
 }
 
 type Order struct {

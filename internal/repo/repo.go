@@ -32,20 +32,16 @@ func (r *Repo) BuyProduct(
 	ctx context.Context,
 	userId uuid.UUID,
 	productTitle string,
-	count int32,
 ) error {
-	if count <= 0 {
-		return fmt.Errorf("count must be positive")
-	}
 	return r.WithTx(ctx, func(txCtx context.Context) error {
 		product, err := r.ProductsRepo.FindByTitle(txCtx, productTitle)
 		if err != nil {
 			return err
 		}
-		if _, err := r.UsersRepo.AddToBalance(txCtx, userId, -product.Price*int64(count)); err != nil {
+		if _, err := r.UsersRepo.AddToBalance(txCtx, userId, -product.Price); err != nil {
 			return err
 		}
-		if _, err := r.OrdersRepo.Create(txCtx, userId, product.ID, count); err != nil {
+		if _, err := r.OrdersRepo.Create(txCtx, userId, product.ID); err != nil {
 			return err
 		}
 		return nil

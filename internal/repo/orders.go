@@ -23,22 +23,21 @@ func (r *OrdersRepo) runner(ctx context.Context) Runner {
 func (r *OrdersRepo) Create(
 	ctx context.Context,
 	userId, productId uuid.UUID,
-	count int32,
 ) (model.Order, error) {
 	q := r.runner(ctx)
 	var o model.Order
 	err := q.QueryRow(ctx, `
 		INSERT INTO merch_shop.orders (user_id, product_id, count)
 		VALUES ($1, $2, $3)
-		RETURNING id, count, user_id, product_id, created_at
-	`, userId, productId, count).Scan(&o.ID, &o.Count, &o.UserID, &o.ProductID, &o.CreatedAt)
+		RETURNING id, user_id, product_id, created_at
+	`, userId, productId).Scan(&o.ID, &o.UserID, &o.ProductID, &o.CreatedAt)
 	return o, err
 }
 
 func (r *OrdersRepo) FindByUserId(ctx context.Context, userId uuid.UUID) ([]model.Order, error) {
 	q := r.runner(ctx)
 	rows, err := q.Query(ctx, `
-		SELECT o.id, o.count, o.user_id, o.product_id, o.created_at,
+		SELECT o.id, o.user_id, o.product_id, o.created_at,
 		       p.title AS product_title, p.price AS product_price
 		FROM merch_shop.orders AS o
 		JOIN merch_shop.products AS p ON p.id = o.product_id
@@ -53,7 +52,7 @@ func (r *OrdersRepo) FindByUserId(ctx context.Context, userId uuid.UUID) ([]mode
 	var orders []model.Order
 	for rows.Next() {
 		var o model.Order
-		if err := rows.Scan(&o.ID, &o.Count, &o.UserID, &o.ProductID, &o.CreatedAt, &o.ProductTitle, &o.ProductPrice); err != nil {
+		if err := rows.Scan(&o.ID, &o.UserID, &o.ProductID, &o.CreatedAt, &o.ProductTitle, &o.ProductPrice); err != nil {
 			return orders, err
 		}
 		orders = append(orders, o)
