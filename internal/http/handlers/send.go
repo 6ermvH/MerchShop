@@ -48,7 +48,10 @@ func (api *API) ApiSendCoinPost(c *gin.Context) {
 	if err := api.repos.SendCoins(ctx, user.ID, to.ID, int64(request.Amount)); err != nil {
 		switch {
 		case strings.Contains(err.Error(), "insufficient funds"):
-			c.JSON(http.StatusUnprocessableEntity, openapi.ErrorResponse{Errors: "insufficient funds"})
+			c.JSON(
+				http.StatusUnprocessableEntity,
+				openapi.ErrorResponse{Errors: "insufficient funds"},
+			)
 		default:
 			c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: err.Error()})
 		}

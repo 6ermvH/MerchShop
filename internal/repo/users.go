@@ -8,16 +8,15 @@ import (
 	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var ErrNotFound = errors.New("not found")
 
 type UsersRepo struct {
-	db *pgxpool.Pool
+	db DB
 }
 
-func NewUsersRepo(db *pgxpool.Pool) *UsersRepo { return &UsersRepo{db: db} }
+func NewUsersRepo(db DB) *UsersRepo { return &UsersRepo{db: db} }
 
 func (r *UsersRepo) runner(ctx context.Context) Runner {
 	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {

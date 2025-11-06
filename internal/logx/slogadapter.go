@@ -29,6 +29,7 @@ func (s *Slog) Warn(
 ) {
 	s.l.WarnContext(ctx, msg, args...)
 }
+
 func (s *Slog) Error(ctx context.Context, msg string, args ...any) {
 	s.l.ErrorContext(ctx, msg, args...)
 }

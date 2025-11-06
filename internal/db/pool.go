@@ -2,14 +2,15 @@ package db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MustPool(ctx context.Context, dsn string) *pgxpool.Pool {
+func NewPool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("connect to db: %w", err)
 	}
-	return pool
+	return pool, nil
 }

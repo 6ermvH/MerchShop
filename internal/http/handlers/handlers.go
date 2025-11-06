@@ -1,3 +1,5 @@
+//go:generate openapi-generator generate -i ../../../schema.yaml -g go-gin-server -o ../../../gen -p apiPath=openapi,interfaceOnly=true,packageName=openapi,hideGenerationTimestamp=true
+
 package handlers
 
 import (
@@ -10,6 +12,13 @@ import (
 type API struct {
 	repos *repo.Repo
 	hs    *jwtutil.HS256
+}
+
+func NewAPI(repo *repo.Repo, hs *jwtutil.HS256) *API {
+	return &API{
+		repos: repo,
+		hs:    hs,
+	}
 }
 
 func (api *API) RegisterRoutes(r *gin.Engine) {

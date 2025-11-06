@@ -4,12 +4,30 @@ services:
     environment:
       DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable"
       PORT: "${PORT}"
+      JWT_SECRET: "${JWT_SECRET}"
+      JWT_ISS: "${JWT_ISS}"
+      JWT_AUD: "${JWT_AUD}"
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "${PORT}:8080"
     restart: unless-stopped
+
+  migrate:
+    image: migrate/migrate:v4.17.1
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./migrations:/migrations:ro
+    command: [
+      "-path=/migrations",
+      "-database=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable",
+      "-verbose",
+      "up"
+    ]
+    restart: "no"
 
   db:
     image: postgres:16-alpine

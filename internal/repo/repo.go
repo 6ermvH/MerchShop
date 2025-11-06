@@ -8,6 +8,23 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type Repo struct {
+	DB            DB
+	UsersRepo     *UsersRepo
+	OrdersRepo    *OrdersRepo
+	TransfersRepo *TransfersRepo
+	ProductsRepo  *ProductsRepo
+}
+
+func NewRepo(db DB) *Repo {
+	r := &Repo{DB: db}
+	r.UsersRepo = NewUsersRepo(db)
+	r.OrdersRepo = NewOrdersRepo(db)
+	r.TransfersRepo = NewTransfersRepo(db)
+	r.ProductsRepo = NewProductsRepo(db)
+	return r
+}
+
 func (r *Repo) SendCoins(ctx context.Context, fromUserId, toUserId uuid.UUID, amount int64) error {
 	if amount <= 0 {
 		return fmt.Errorf("amount must be positive")

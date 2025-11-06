@@ -6,12 +6,11 @@ import (
 	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type OrdersRepo struct{ db *pgxpool.Pool }
+type OrdersRepo struct{ db DB }
 
-func NewOrdersRepo(db *pgxpool.Pool) *OrdersRepo { return &OrdersRepo{db: db} }
+func NewOrdersRepo(db DB) *OrdersRepo { return &OrdersRepo{db: db} }
 
 func (r *OrdersRepo) runner(ctx context.Context) Runner {
 	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
