@@ -1,10 +1,11 @@
 GOFILES := ./cmd/ ./internal/
 
-GENERATE=gen/openapi
+GENERATE_HANDLERS=gen/openapi
+GENERATE_REPO=gen/mock
 
 all: up
 
-build: $(GENERATE)
+build: generate
 	docker-compose build
 
 up:
@@ -17,12 +18,17 @@ fmt:
 	gofmt -s -w $(GOFILES)
 .PHONY: fmt
 
-$(GENERATE):
-	go generate ./internal/... > /dev/null
+generate: $(GENERATE_HANDLERS) $(GENERATE_REPO)
+
+$(GENERATE_HANDLERS):
+	go generate ./internal/http/... > /dev/null
+
+$(GENERATE_REPO):
+	go generate ./internal/repo/... > /dev/null
 
 clean:
 	docker-compose down -v
 	rm -rf pgdata
-	rm -rf gen/openapi gen/.openapi-generator
+	rm -rf $(GENERATE_HANDLERS) $(GENERATE_REPO)
 .PHONY: clean
 

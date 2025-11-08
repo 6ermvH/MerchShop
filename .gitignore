@@ -1,3 +1,4 @@
 .env
 gen/.openapi-generator
 gen/openapi
+gen/mock

@@ -9,20 +9,11 @@ import (
 )
 
 type Repo struct {
-	DB            DB
-	UsersRepo     *UsersRepo
-	OrdersRepo    *OrdersRepo
-	TransfersRepo *TransfersRepo
-	ProductsRepo  *ProductsRepo
+	db DB
 }
 
 func NewRepo(db DB) *Repo {
-	r := &Repo{DB: db}
-	r.UsersRepo = NewUsersRepo(db)
-	r.OrdersRepo = NewOrdersRepo(db)
-	r.TransfersRepo = NewTransfersRepo(db)
-	r.ProductsRepo = NewProductsRepo(db)
-	return r
+	return &Repo{db: db}
 }
 
 func (r *Repo) SendCoins(ctx context.Context, fromUserId, toUserId uuid.UUID, amount int64) error {
@@ -34,13 +25,13 @@ func (r *Repo) SendCoins(ctx context.Context, fromUserId, toUserId uuid.UUID, am
 	}
 
 	return r.WithTx(ctx, func(txCtx context.Context) error {
-		if _, err := r.UsersRepo.AddToBalance(txCtx, fromUserId, -amount); err != nil {
+		if _, err := r.AddToBalance(txCtx, fromUserId, -amount); err != nil {
 			return err
 		}
-		if _, err := r.UsersRepo.AddToBalance(txCtx, toUserId, +amount); err != nil {
+		if _, err := r.AddToBalance(txCtx, toUserId, +amount); err != nil {
 			return err
 		}
-		_, err := r.TransfersRepo.Create(txCtx, fromUserId, toUserId, amount)
+		_, err := r.CreateTransfer(txCtx, fromUserId, toUserId, amount)
 		return err
 	}, &TxOptions{Level: pgx.Serializable, MaxRetries: 10})
 }
@@ -51,14 +42,14 @@ func (r *Repo) BuyProduct(
 	productTitle string,
 ) error {
 	return r.WithTx(ctx, func(txCtx context.Context) error {
-		product, err := r.ProductsRepo.FindByTitle(txCtx, productTitle)
+		product, err := r.FindProductByTitle(txCtx, productTitle)
 		if err != nil {
 			return err
 		}
-		if _, err := r.UsersRepo.AddToBalance(txCtx, userId, -product.Price); err != nil {
+		if _, err := r.AddToBalance(txCtx, userId, -product.Price); err != nil {
 			return err
 		}
-		if _, err := r.OrdersRepo.Create(txCtx, userId, product.ID); err != nil {
+		if _, err := r.CreateOrder(txCtx, userId, product.ID); err != nil {
 			return err
 		}
 		return nil

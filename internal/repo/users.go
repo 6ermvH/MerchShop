@@ -12,20 +12,7 @@ import (
 
 var ErrNotFound = errors.New("not found")
 
-type UsersRepo struct {
-	db DB
-}
-
-func NewUsersRepo(db DB) *UsersRepo { return &UsersRepo{db: db} }
-
-func (r *UsersRepo) runner(ctx context.Context) Runner {
-	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
-		return tx
-	}
-	return r.db
-}
-
-func (r *UsersRepo) FindById(ctx context.Context, id uuid.UUID) (model.User, error) {
+func (r *Repo) FindUserByID(ctx context.Context, id uuid.UUID) (model.User, error) {
 	q := r.runner(ctx)
 	var u model.User
 	err := q.QueryRow(ctx, `
@@ -41,7 +28,7 @@ func (r *UsersRepo) FindById(ctx context.Context, id uuid.UUID) (model.User, err
 	return u, nil
 }
 
-func (r *UsersRepo) FindByUsername(ctx context.Context, username string) (model.User, error) {
+func (r *Repo) FindUserByUsername(ctx context.Context, username string) (model.User, error) {
 	q := r.runner(ctx)
 	var u model.User
 	err := q.QueryRow(ctx, `
@@ -57,29 +44,7 @@ func (r *UsersRepo) FindByUsername(ctx context.Context, username string) (model.
 	return u, nil
 }
 
-func (r *UsersRepo) UpdateBalance(
-	ctx context.Context,
-	userId uuid.UUID,
-	newBalance int64,
-) (model.User, error) {
-	q := r.runner(ctx)
-	var u model.User
-	err := q.QueryRow(ctx, `
-		UPDATE merch_shop.users
-		SET balance=$2
-		WHERE id=$1
-		RETURNING id, username, password_hash, balance, created_at
-	`, userId, newBalance).Scan(&u.ID, &u.Username, &u.PasswordHash, &u.Balance, &u.CreatedAt)
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return model.User{}, ErrNotFound
-		}
-		return model.User{}, err
-	}
-	return u, nil
-}
-
-func (r *UsersRepo) AddToBalance(
+func (r *Repo) AddToBalance(
 	ctx context.Context,
 	userId uuid.UUID,
 	delta int64,
@@ -110,7 +75,7 @@ func (r *UsersRepo) AddToBalance(
 	return u, err
 }
 
-func (r *UsersRepo) Create(ctx context.Context, username, passwordHash string) (model.User, error) {
+func (r *Repo) CreateUser(ctx context.Context, username, passwordHash string) (model.User, error) {
 	q := r.runner(ctx)
 	var u model.User
 	err := q.QueryRow(ctx, `

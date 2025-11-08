@@ -22,14 +22,14 @@ func (api *API) ApiInfoGet(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
 	defer cancel()
 
-	orders, err := api.repos.OrdersRepo.FindByUserId(ctx, user.ID)
+	orders, err := api.repos.FindOrdersByUserID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
 		return
 	}
 	inventory := makeInfoResponseInventory(orders)
 
-	recv, err := api.repos.TransfersRepo.FindByFromId(ctx, user.ID)
+	recv, err := api.repos.FindTransfersFromID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
 		return
@@ -43,7 +43,7 @@ func (api *API) ApiInfoGet(c *gin.Context) {
 			})
 	}
 
-	sent, err := api.repos.TransfersRepo.FindByToId(ctx, user.ID)
+	sent, err := api.repos.FindTransfersToID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
 		return

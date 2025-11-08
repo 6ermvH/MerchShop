@@ -35,7 +35,7 @@ func (api *API) ApiSendCoinPost(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
 	defer cancel()
 
-	to, err := api.repos.UsersRepo.FindByUsername(ctx, request.ToUser)
+	to, err := api.repos.FindUserByUsername(ctx, request.ToUser)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			c.JSON(http.StatusNotFound, openapi.ErrorResponse{Errors: "receiver not found"})

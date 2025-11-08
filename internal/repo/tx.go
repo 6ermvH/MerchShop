@@ -9,13 +9,30 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
+type Runner interface {
+	Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
+type Tx interface {
+	Runner
+	Commit(ctx context.Context) error
+	Rollback(ctx context.Context) error
+}
+
+type DB interface {
+	Runner
+	BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
+}
+
 type txKey struct{}
 
 func (r *Repo) runner(ctx context.Context) Runner {
 	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
 		return tx
 	}
-	return r.DB
+	return r.db
 }
 
 type TxOptions struct {
@@ -53,7 +70,7 @@ func (r *Repo) WithTx(
 			defer cancel()
 		}
 
-		tx, err := r.DB.BeginTx(inner, pgx.TxOptions{IsoLevel: level})
+		tx, err := r.db.BeginTx(inner, pgx.TxOptions{IsoLevel: level})
 		if err != nil {
 			return err
 		}

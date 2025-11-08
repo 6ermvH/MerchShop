@@ -15,7 +15,7 @@ const (
 	CtxUserKey = "auth_user"
 )
 
-func Auth(hs *jwtutil.HS256, userRepo *repo.UsersRepo) gin.HandlerFunc {
+func Auth(hs jwtutil.JWT, repository repo.MerchRepo) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		raw := parseBearer(c.GetHeader("Authorization"))
 		if raw == "" {
@@ -53,7 +53,7 @@ func Auth(hs *jwtutil.HS256, userRepo *repo.UsersRepo) gin.HandlerFunc {
 			return
 		}
 
-		user, err := userRepo.FindById(ctx, userId)
+		user, err := repository.FindUserByID(ctx, userId)
 		if err != nil && err != repo.ErrNotFound {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
 			return

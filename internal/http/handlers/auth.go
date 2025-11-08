@@ -22,7 +22,7 @@ func (api *API) ApiAuthPost(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
 	defer cancel()
 
-	user, err := api.repos.UsersRepo.FindByUsername(ctx, request.Username)
+	user, err := api.repos.FindUserByUsername(ctx, request.Username)
 	switch err {
 	case nil:
 		if err := hasher.CheckPassword(user.PasswordHash, request.Password); err != nil {
@@ -35,7 +35,7 @@ func (api *API) ApiAuthPost(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "hash error"})
 			return
 		}
-		user, err = api.repos.UsersRepo.Create(ctx, request.Username, hash)
+		user, err = api.repos.CreateUser(ctx, request.Username, hash)
 		if err != nil {
 			c.JSON(http.StatusConflict, openapi.ErrorResponse{Errors: "username already exists"})
 			return
