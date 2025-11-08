@@ -8,18 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-type ProductsRepo struct{ db DB }
-
-func NewProductsRepo(db DB) *ProductsRepo { return &ProductsRepo{db: db} }
-
-func (r *ProductsRepo) runner(ctx context.Context) Runner {
-	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
-		return tx
-	}
-	return r.db
-}
-
-func (r *ProductsRepo) FindByTitle(ctx context.Context, title string) (model.Product, error) {
+func (r *Repo) FindProductByTitle(ctx context.Context, title string) (model.Product, error) {
 	q := r.runner(ctx)
 	var p model.Product
 	err := q.QueryRow(ctx, `

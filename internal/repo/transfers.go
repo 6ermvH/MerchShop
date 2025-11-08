@@ -5,21 +5,9 @@ import (
 
 	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 )
 
-type TransfersRepo struct{ db DB }
-
-func NewTransfersRepo(db DB) *TransfersRepo { return &TransfersRepo{db: db} }
-
-func (r *TransfersRepo) runner(ctx context.Context) Runner {
-	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
-		return tx
-	}
-	return r.db
-}
-
-func (r *TransfersRepo) Create(
+func (r *Repo) CreateTransfer(
 	ctx context.Context,
 	fromID, toID uuid.UUID,
 	amount int64,
@@ -34,7 +22,7 @@ func (r *TransfersRepo) Create(
 	return t, err
 }
 
-func (r *TransfersRepo) FindByFromId(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) {
+func (r *Repo) FindTransfersFromID(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) {
 	q := r.runner(ctx)
 	rows, err := q.Query(ctx, `
 		SELECT t.id, t.from_user_id, u.username, t.to_user_id, t.amount, t.created_at
@@ -61,7 +49,7 @@ func (r *TransfersRepo) FindByFromId(ctx context.Context, id uuid.UUID) ([]model
 	return transfers, nil
 }
 
-func (r *TransfersRepo) FindByToId(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) {
+func (r *Repo) FindTransfersToID(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) {
 	q := r.runner(ctx)
 	rows, err := q.Query(ctx, `
 		SELECT t.id, t.from_user_id, t.to_user_id, u.username, t.amount, t.created_at

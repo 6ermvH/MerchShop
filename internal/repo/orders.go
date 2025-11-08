@@ -5,21 +5,9 @@ import (
 
 	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 )
 
-type OrdersRepo struct{ db DB }
-
-func NewOrdersRepo(db DB) *OrdersRepo { return &OrdersRepo{db: db} }
-
-func (r *OrdersRepo) runner(ctx context.Context) Runner {
-	if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok && tx != nil {
-		return tx
-	}
-	return r.db
-}
-
-func (r *OrdersRepo) Create(
+func (r *Repo) CreateOrder(
 	ctx context.Context,
 	userId, productId uuid.UUID,
 ) (model.Order, error) {
@@ -33,7 +21,7 @@ func (r *OrdersRepo) Create(
 	return o, err
 }
 
-func (r *OrdersRepo) FindByUserId(ctx context.Context, userId uuid.UUID) ([]model.Order, error) {
+func (r *Repo) FindOrdersByUserID(ctx context.Context, userId uuid.UUID) ([]model.Order, error) {
 	q := r.runner(ctx)
 	rows, err := q.Query(ctx, `
 		SELECT o.id, o.user_id, o.product_id, o.created_at,
