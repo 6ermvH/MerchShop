@@ -8,8 +8,8 @@ import (
 
 type User struct {
 	ID           uuid.UUID `db:"id"            json:"id"`
-	Balance      int64     `db:"balance"       json:"balance"`
 	Username     string    `db:"username"      json:"username"`
+	Balance      int64     `db:"balance"       json:"balance"`
 	PasswordHash string    `db:"password_hash" json:"password_hash"`
 	CreatedAt    time.Time `db:"created_at"    json:"created_at"`
 }

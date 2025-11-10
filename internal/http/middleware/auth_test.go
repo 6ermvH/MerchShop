@@ -33,7 +33,9 @@ func TestAuth_MissingToken(t *testing.T) {
 	j := jwtutil.NewHS256("hello-world-my-name-is-german", "merch", "merch")
 
 	r := gin.New()
-	r.GET("/x", Auth(j, repoMock), func(c *gin.Context) { c.Status(200) })
+	r.GET("/x", Auth(j, repoMock), func(c *gin.Context) {
+		c.Status(200)
+	})
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/x", nil)
@@ -61,7 +63,12 @@ func TestAuth_GoodToken_UserFound_OK(t *testing.T) {
 	token, _ := j.Sign(user.ID, user.Username)
 
 	r := gin.New()
-	r.GET("/x", Auth(j, repoMock), func(c *gin.Context) { c.Status(200) })
+	r.GET("/x", Auth(j, repoMock), func(c *gin.Context) {
+		if getUser, ok := c.Get(CtxUserKey); !ok || getUser.(model.User) != *user {
+			t.Fatalf("bad get user from context")
+		}
+		c.Status(200)
+	})
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/x", nil)
