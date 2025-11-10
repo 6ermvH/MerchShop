@@ -5,7 +5,7 @@ GENERATE_REPO=gen/mock
 
 all: up
 
-build: generate
+build: $(GENERATE_REPO) $(GENERATE_HANDLERS)
 	docker-compose build
 
 up:
@@ -18,13 +18,11 @@ fmt:
 	gofmt -s -w $(GOFILES)
 .PHONY: fmt
 
-generate: $(GENERATE_HANDLERS) $(GENERATE_REPO)
+$(GENERATE_REPO):
+	go generate ./internal/repo/... > /dev/null
 
 $(GENERATE_HANDLERS):
 	go generate ./internal/http/... > /dev/null
-
-$(GENERATE_REPO):
-	go generate ./internal/repo/... > /dev/null
 
 clean:
 	docker-compose down -v
