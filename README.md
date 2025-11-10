@@ -33,9 +33,9 @@
 
 ```bash
 	github.com/6ermvH/MerchShop/internal/db		coverage: 0.0% of statements
-ok  	github.com/6ermvH/MerchShop/internal/hasher	(cached)	coverage: 100.0% of statements
-ok  	github.com/6ermvH/MerchShop/internal/http/handlers	(cached)	coverage: 92.7% of statements
-ok  	github.com/6ermvH/MerchShop/internal/http/middleware	(cached)	coverage: 52.0% of statements
+ok  	github.com/6ermvH/MerchShop/internal/hasher	0.497s	coverage: 100.0% of statements
+ok  	github.com/6ermvH/MerchShop/internal/http/handlers	0.354s	coverage: 92.7% of statements
+ok  	github.com/6ermvH/MerchShop/internal/http/middleware	0.009s	coverage: 60.3% of statements
 	github.com/6ermvH/MerchShop/internal/jwtutil		coverage: 0.0% of statements
 	github.com/6ermvH/MerchShop/internal/logx		coverage: 0.0% of statements
 ?   	github.com/6ermvH/MerchShop/internal/model	[no test files]
