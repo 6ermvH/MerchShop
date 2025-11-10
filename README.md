@@ -1,12 +1,12 @@
 # MerchShop
 
-Учебный проект на Go. REST API сервиса для внутреннего магазина мерча.  
+Учебный проект на Go. CRUD REST API сервиса для внутреннего магазина мерча.  
 Реализованы авторизация по JWT, переводы монет между пользователями, покупка товаров, учёт заказов и истории транзакций.
 
 ## Стек
 - Go 1.24
 - Gin
-- PostgreSQL (pgx)
+- PostgreSQL (pgxpool)
 - Docker / docker-compose
 - bcrypt / JWT
 - testify / gomock
@@ -44,4 +44,14 @@ ok  	github.com/6ermvH/MerchShop/internal/http/middleware	(cached)	coverage: 52.
 
 ## Запуск
 ```bash
-make up
+make build up
+```
+
+## Зависимости
+```bash
+openapi-generator-cli v7.15.0
+mockgen v1.6.0
+go v1.24.0
+Docker version 28.4.0
+Docker Compose version 2.39.4
+```
