@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/6ermvH/MerchShop/gen/openapi"
 	"github.com/6ermvH/MerchShop/internal/jwtutil"
 	"github.com/6ermvH/MerchShop/internal/repo"
 	"github.com/gin-gonic/gin"
@@ -57,6 +58,8 @@ func Auth(hs jwtutil.JWT, repository repo.MerchRepo) gin.HandlerFunc {
 		if err != nil && err != repo.ErrNotFound {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
 			return
+		} else if err == repo.ErrNotFound {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "invalid token"})
 		}
 
 		// TODO: add Validate token
