@@ -24,6 +24,8 @@ func TestParseBearer(t *testing.T) {
 }
 
 func TestAuth_MissingToken(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -42,6 +44,8 @@ func TestAuth_MissingToken(t *testing.T) {
 }
 
 func TestAuth_GoodToken_UserFound_OK(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -69,6 +73,8 @@ func TestAuth_GoodToken_UserFound_OK(t *testing.T) {
 }
 
 func TestAuth_UserNotFound(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
