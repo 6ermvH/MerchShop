@@ -20,7 +20,11 @@ type MerchRepo interface {
 	CreateOrder(ctx context.Context, userId, productId uuid.UUID) (model.Order, error)
 	FindOrdersByUserID(ctx context.Context, userId uuid.UUID) ([]model.Order, error)
 
-	CreateTransfer(ctx context.Context, fromID, toID uuid.UUID, amount int64) (model.Transfer, error)
+	CreateTransfer(
+		ctx context.Context,
+		fromID, toID uuid.UUID,
+		amount int64,
+	) (model.Transfer, error)
 	FindTransfersFromID(ctx context.Context, fromID uuid.UUID) ([]model.Transfer, error)
 	FindTransfersToID(ctx context.Context, toID uuid.UUID) ([]model.Transfer, error)
 

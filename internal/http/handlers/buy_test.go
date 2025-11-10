@@ -20,9 +20,11 @@ func TestBuyItem_OK(t *testing.T) {
 
 	user := model.User{ID: uuid.New(), Username: "german", Balance: 100}
 
-	products := []string{"t-shirt", "cup", "book",
+	products := []string{
+		"t-shirt", "cup", "book",
 		"pen", "powerbank", "hoody", "umbrella",
-		"socks", "wallet", "pink-hoody"}
+		"socks", "wallet", "pink-hoody",
+	}
 
 	for _, product := range products {
 
@@ -52,7 +54,12 @@ func TestBuyItem_OK(t *testing.T) {
 			r.ServeHTTP(w, req)
 
 			if w.Code != http.StatusOK {
-				t.Fatalf("status got %d want %d; body=%s", w.Code, http.StatusOK, w.Body.String())
+				t.Fatalf(
+					"has code: %d want code: %d; body=%s",
+					w.Code,
+					http.StatusOK,
+					w.Body.String(),
+				)
 			}
 		})
 	}
@@ -93,7 +100,12 @@ func TestBuyItem_UnknownItem(t *testing.T) {
 			r.ServeHTTP(w, req)
 
 			if w.Code != http.StatusInternalServerError {
-				t.Fatalf("status got %d want %d; body=%s", w.Code, http.StatusInternalServerError, w.Body.String())
+				t.Fatalf(
+					"has code: %d want code: %d; body=%s",
+					w.Code,
+					http.StatusInternalServerError,
+					w.Body.String(),
+				)
 			}
 		})
 	}

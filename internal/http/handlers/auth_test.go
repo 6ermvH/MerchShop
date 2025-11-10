@@ -69,7 +69,7 @@ func TestRegister(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
-		t.Fatalf("unexpected status code: got %d, want %d; body: %s", w.Code, http.StatusOK, w.Body.String())
+		t.Fatalf("has code: %d, want code: %d; body: %s", w.Code, http.StatusOK, w.Body.String())
 	}
 
 	var resp openapi.AuthResponse
@@ -79,7 +79,6 @@ func TestRegister(t *testing.T) {
 	if resp.Token == "" {
 		t.Fatalf("empty token in response")
 	}
-
 }
 
 func TestLogin(t *testing.T) {
@@ -120,7 +119,7 @@ func TestLogin(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
-		t.Fatalf("unexpected status code: got %d, want %d; body: %s", w.Code, http.StatusOK, w.Body.String())
+		t.Fatalf("has code: %d, want code: %d; body: %s", w.Code, http.StatusOK, w.Body.String())
 	}
 
 	var resp openapi.AuthResponse
@@ -130,7 +129,6 @@ func TestLogin(t *testing.T) {
 	if resp.Token == "" {
 		t.Fatalf("empty token in response")
 	}
-
 }
 
 func TestWrongPassword(t *testing.T) {
@@ -171,9 +169,13 @@ func TestWrongPassword(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusUnauthorized {
-		t.Fatalf("unexpected status code: got %d, want %d; body: %s", w.Code, http.StatusUnauthorized, w.Body.String())
+		t.Fatalf(
+			"has code: %d, want code: %d; body: %s",
+			w.Code,
+			http.StatusUnauthorized,
+			w.Body.String(),
+		)
 	}
-
 }
 
 func TestDbError(t *testing.T) {
@@ -205,9 +207,13 @@ func TestDbError(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusInternalServerError {
-		t.Fatalf("unexpected status code: got %d, want %d; body: %s", w.Code, http.StatusInternalServerError, w.Body.String())
+		t.Fatalf(
+			"has code: %d, want code: %d; body: %s",
+			w.Code,
+			http.StatusInternalServerError,
+			w.Body.String(),
+		)
 	}
-
 }
 
 func TestRegister_UsernameAlreadyExists(t *testing.T) {
@@ -240,7 +246,12 @@ func TestRegister_UsernameAlreadyExists(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusConflict {
-		t.Fatalf("unexpected status code: got %d, want %d; body: %s", w.Code, http.StatusConflict, w.Body.String())
+		t.Fatalf(
+			"has code: %d, want code: %d; body: %s",
+			w.Code,
+			http.StatusConflict,
+			w.Body.String(),
+		)
 	}
 }
 
@@ -262,6 +273,11 @@ func TestAuth_BadPayload(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusBadRequest {
-		t.Fatalf("unexpected status: got %d, want %d; body: %s", w.Code, http.StatusBadRequest, w.Body.String())
+		t.Fatalf(
+			"has code: %d, want code: %d; body: %s",
+			w.Code,
+			http.StatusBadRequest,
+			w.Body.String(),
+		)
 	}
 }
