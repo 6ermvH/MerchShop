@@ -7,35 +7,35 @@ import (
 )
 
 type User struct {
-	ID           uuid.UUID `db:"id"            json:"id"`
-	Username     string    `db:"username"      json:"username"`
-	Balance      int64     `db:"balance"       json:"balance"`
-	PasswordHash string    `db:"password_hash" json:"password_hash"`
-	CreatedAt    time.Time `db:"created_at"    json:"created_at"`
+	ID           uuid.UUID
+	Username     string
+	Balance      int64
+	PasswordHash string
+	CreatedAt    time.Time
 }
 
 type Transfer struct {
-	ID           uuid.UUID `db:"id"           json:"id"`
-	FromUserID   uuid.UUID `db:"from_user_id" json:"from_user_id"`
+	ID           uuid.UUID
+	FromUserID   uuid.UUID
 	FromUserName string
-	ToUserID     uuid.UUID `db:"to_user_id"   json:"to_user_id"`
+	ToUserID     uuid.UUID
 	ToUserName   string
-	Amount       int64     `db:"amount"       json:"amount"`
-	CreatedAt    time.Time `db:"created_at"   json:"created_at"`
+	Amount       int64
+	CreatedAt    time.Time
 }
 
 type Order struct {
-	ID           uuid.UUID `db:"id"         json:"id"`
+	ID           uuid.UUID
 	Count        int32
-	UserID       uuid.UUID `db:"user_id"    json:"user_id"`
-	ProductID    uuid.UUID `db:"product_id" json:"product_id"`
+	UserID       uuid.UUID
+	ProductID    uuid.UUID
 	ProductTitle string
 	ProductPrice int64
-	CreatedAt    time.Time `db:"created_at" json:"created_at"`
+	CreatedAt    time.Time
 }
 
 type Product struct {
-	ID    uuid.UUID `db:"id"    json:"id"`
-	Title string    `db:"title" json:"title"`
-	Price int64     `db:"price" json:"price"`
+	ID    uuid.UUID
+	Title string
+	Price int64
 }

@@ -12,5 +12,6 @@ func NewPool(ctx context.Context, dsn string) (*pgxpool.Pool, error) {
 	if err != nil {
 		return nil, fmt.Errorf("connect to db: %w", err)
 	}
+
 	return pool, nil
 }

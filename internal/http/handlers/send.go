@@ -18,30 +18,38 @@ func (api *API) ApiSendCoinPost(c *gin.Context) {
 	var request openapi.SendCoinRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+
 		return
 	}
+
 	if strings.TrimSpace(request.ToUser) == "" || request.Amount <= 0 {
 		c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+
 		return
 	}
 
 	userRaw, ok := c.Get(middleware.CtxUserKey)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "no user in context"})
+
 		return
 	}
-	user := userRaw.(model.User)
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+	user := userRaw.(model.User) //nolint:forcetypeassert
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second) //nolint:mnd
 	defer cancel()
 
 	to, err := api.repos.FindUserByUsername(ctx, request.ToUser)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			c.JSON(http.StatusNotFound, openapi.ErrorResponse{Errors: "receiver not found"})
+
 			return
 		}
+
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+
 		return
 	}
 
@@ -55,6 +63,7 @@ func (api *API) ApiSendCoinPost(c *gin.Context) {
 		default:
 			c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: err.Error()})
 		}
+
 		return
 	}
 

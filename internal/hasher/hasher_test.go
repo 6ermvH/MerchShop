@@ -87,5 +87,6 @@ func hash(pwd string) string {
 	if hash, err := HashPassword(pwd); err == nil {
 		return hash
 	}
+
 	return ""
 }

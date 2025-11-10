@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/jackc/pgx/v5"
@@ -10,7 +11,9 @@ import (
 
 func (r *Repo) FindProductByTitle(ctx context.Context, title string) (model.Product, error) {
 	q := r.runner(ctx)
+
 	var p model.Product
+
 	err := q.QueryRow(ctx, `
 		SELECT id, title, price
 		FROM merch_shop.products
@@ -20,7 +23,9 @@ func (r *Repo) FindProductByTitle(ctx context.Context, title string) (model.Prod
 		if errors.Is(err, pgx.ErrNoRows) {
 			return model.Product{}, ErrNotFound
 		}
-		return model.Product{}, err
+
+		return model.Product{}, fmt.Errorf("get query row sql: %w", err)
 	}
+
 	return p, nil
 }

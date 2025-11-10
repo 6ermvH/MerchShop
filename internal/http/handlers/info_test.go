@@ -28,6 +28,7 @@ func withUser(u model.User) gin.HandlerFunc {
 
 func TestInfo_NoUserInContext_401(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -46,6 +47,7 @@ func TestInfo_NoUserInContext_401(t *testing.T) {
 
 func TestInfo_FindOrdersError_500(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -68,6 +70,7 @@ func TestInfo_FindOrdersError_500(t *testing.T) {
 
 func TestInfo_FindTransfersFromError_500(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -95,6 +98,7 @@ func TestInfo_FindTransfersFromError_500(t *testing.T) {
 
 func TestInfo_FindTransfersToError_500(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -126,6 +130,7 @@ func TestInfo_FindTransfersToError_500(t *testing.T) {
 
 func TestInfo_OK_Aggregates(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -167,11 +172,15 @@ func TestInfo_OK_Aggregates(t *testing.T) {
 	require.Equal(t, http.StatusOK, w.Code)
 
 	var resp openapi.InfoResponse
+
 	require.NoError(t, json.Unmarshal(w.Body.Bytes(), &resp))
 
 	require.Equal(t, int32(user.Balance), resp.Coins)
 
-	sort.Slice(resp.Inventory, func(i, j int) bool { return resp.Inventory[i].Type < resp.Inventory[j].Type })
+	sort.Slice(
+		resp.Inventory,
+		func(i, j int) bool { return resp.Inventory[i].Type < resp.Inventory[j].Type },
+	)
 	require.Equal(t, []openapi.InfoResponseInventoryInner{
 		{Type: "coffee", Quantity: 2},
 		{Type: "tea", Quantity: 1},

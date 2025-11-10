@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TODO: add Debug logs
 func Log(lg logx.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rid, _ := c.Get(CtxRequestId)
@@ -22,6 +21,7 @@ func Log(lg logx.Logger) gin.HandlerFunc {
 		c.Request = c.Request.WithContext(ctx)
 
 		start := time.Now()
+
 		c.Next()
 		l.Info(ctx, "request completed",
 			"status", c.Writer.Status(),

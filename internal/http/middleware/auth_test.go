@@ -40,6 +40,7 @@ func TestAuth_MissingToken(t *testing.T) {
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/x", nil)
 	r.ServeHTTP(w, req)
+
 	if w.Code != http.StatusUnauthorized {
 		t.Fatalf("has code: %d, want code: %d", w.Code, http.StatusUnauthorized)
 	}
@@ -67,6 +68,7 @@ func TestAuth_GoodToken_UserFound_OK(t *testing.T) {
 		if getUser, ok := c.Get(CtxUserKey); !ok || getUser.(model.User) != *user {
 			t.Fatalf("bad get user from context")
 		}
+
 		c.Status(200)
 	})
 
@@ -74,6 +76,7 @@ func TestAuth_GoodToken_UserFound_OK(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "/x", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.ServeHTTP(w, req)
+
 	if w.Code != http.StatusOK {
 		t.Fatalf("has code: %d, want code: %d", w.Code, http.StatusOK)
 	}
@@ -106,6 +109,7 @@ func TestAuth_UserNotFound(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "/x", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.ServeHTTP(w, req)
+
 	if w.Code != http.StatusUnauthorized {
 		t.Fatalf("has code: %d, want code: %d", w.Code, http.StatusUnauthorized)
 	}

@@ -21,6 +21,7 @@ import (
 
 func TestSendCoin_BadJSON(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -38,12 +39,17 @@ func TestSendCoin_BadJSON(t *testing.T) {
 
 func TestSendCoin_BadPayload_EmptyOrNonPositive(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	api := NewAPI(mock_repo.NewMockMerchRepo(ctrl), nil)
 	r := gin.New()
-	r.POST("/api/sendCoin", withUser(model.User{ID: uuid.New(), Username: "me"}), api.ApiSendCoinPost)
+	r.POST(
+		"/api/sendCoin",
+		withUser(model.User{ID: uuid.New(), Username: "me"}),
+		api.ApiSendCoinPost,
+	)
 
 	cases := []openapi.SendCoinRequest{
 		{ToUser: "", Amount: 10},
@@ -63,6 +69,7 @@ func TestSendCoin_BadPayload_EmptyOrNonPositive(t *testing.T) {
 
 func TestSendCoin_NoUserInContext_401(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -81,6 +88,7 @@ func TestSendCoin_NoUserInContext_401(t *testing.T) {
 
 func TestSendCoin_ReceiverNotFound_404(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -106,6 +114,7 @@ func TestSendCoin_ReceiverNotFound_404(t *testing.T) {
 
 func TestSendCoin_FindUserDBError_500(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -131,6 +140,7 @@ func TestSendCoin_FindUserDBError_500(t *testing.T) {
 
 func TestSendCoin_InsufficientFunds_422(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -161,6 +171,7 @@ func TestSendCoin_InsufficientFunds_422(t *testing.T) {
 
 func TestSendCoin_OtherSendError_500(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -191,6 +202,7 @@ func TestSendCoin_OtherSendError_500(t *testing.T) {
 
 func TestSendCoin_OK(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 

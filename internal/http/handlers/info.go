@@ -15,50 +15,58 @@ func (api *API) ApiInfoGet(c *gin.Context) {
 	userRaw, ok := c.Get(middleware.CtxUserKey)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "no user in context"})
+
 		return
 	}
-	user := userRaw.(model.User)
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+	user := userRaw.(model.User) //nolint:forcetypeassert
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second) //nolint:mnd
 	defer cancel()
 
 	orders, err := api.repos.FindOrdersByUserID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+
 		return
 	}
+
 	inventory := makeInfoResponseInventory(orders)
 
 	recv, err := api.repos.FindTransfersFromID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+
 		return
 	}
+
 	coinHistoryFrom := make([]openapi.InfoResponseCoinHistoryReceivedInner, 0)
 	for _, rec := range recv {
 		coinHistoryFrom = append(coinHistoryFrom,
 			openapi.InfoResponseCoinHistoryReceivedInner{
 				FromUser: rec.FromUserName,
-				Amount:   int32(rec.Amount),
+				Amount:   int32(rec.Amount), //nolint:gosec
 			})
 	}
 
 	sent, err := api.repos.FindTransfersToID(ctx, user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+
 		return
 	}
+
 	coinHistoryTo := make([]openapi.InfoResponseCoinHistorySentInner, 0)
 	for _, sen := range sent {
 		coinHistoryTo = append(coinHistoryTo,
 			openapi.InfoResponseCoinHistorySentInner{
 				ToUser: sen.ToUserName,
-				Amount: int32(sen.Amount),
+				Amount: int32(sen.Amount), //nolint:gosec
 			})
 	}
 
 	response := openapi.InfoResponse{
-		Coins:     int32(user.Balance),
+		Coins:     int32(user.Balance), //nolint:gosec
 		Inventory: inventory,
 		CoinHistory: openapi.InfoResponseCoinHistory{
 			Received: coinHistoryFrom,
@@ -83,7 +91,7 @@ func makeInfoResponseInventory(orders []model.Order) []openapi.InfoResponseInven
 		inventory = append(inventory,
 			openapi.InfoResponseInventoryInner{
 				Type:     string(title),
-				Quantity: int32(count),
+				Quantity: int32(count), //nolint:gosec
 			})
 	}
 

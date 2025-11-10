@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"time"
 
@@ -11,43 +12,50 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TODO: add logs
 func (api *API) ApiAuthPost(c *gin.Context) {
 	var request openapi.AuthRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second) //nolint:mnd
 	defer cancel()
 
 	user, err := api.repos.FindUserByUsername(ctx, request.Username)
-	switch err {
-	case nil:
+
+	switch {
+	case err == nil:
 		if err := hasher.CheckPassword(user.PasswordHash, request.Password); err != nil {
 			c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "invalid credentials"})
+
 			return
 		}
-	case repo.ErrNotFound:
+	case errors.Is(err, repo.ErrNotFound):
 		hash, err := hasher.HashPassword(request.Password)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "hash error"})
+
 			return
 		}
+
 		user, err = api.repos.CreateUser(ctx, request.Username, hash)
 		if err != nil {
 			c.JSON(http.StatusConflict, openapi.ErrorResponse{Errors: "username already exists"})
+
 			return
 		}
 	default:
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+
 		return
 	}
 
 	tok, err := api.hs.Sign(user.ID, user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "sign JWT"})
+
 		return
 	}
 

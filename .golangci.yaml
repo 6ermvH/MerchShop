@@ -1,15 +1,27 @@
 version: "2"
 
 run:
+  tests: false
   timeout: 1m
   relative-path-mode: gomod
   concurrency: 4
 
 linters:
-  enable-all: true
+  default: all
+  disable:
+    - depguard
+    - testpackage
+    - testifylint
+    - varnamelen
+    - noctx
+    - exhaustruct
+    - dupl
+    - revive
+    - ireturn
   exclusions:
     paths:
       - "gen/openapi/"
+      - "gen/mock/"
 
 formatters:
   enable:
@@ -20,3 +32,4 @@ formatters:
   exclusions:
     paths:
       - "gen/openapi/"
+      - "gen/mock"

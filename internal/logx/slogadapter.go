@@ -9,7 +9,10 @@ type Slog struct{ l *slog.Logger }
 
 func NewSlog(l *slog.Logger) *Slog { return &Slog{l: l} }
 
-func (s *Slog) With(args ...any) Logger { return &Slog{l: s.l.With(args...)} }
+func (s *Slog) With(args ...any) Logger { //nolint:ireturn
+	return &Slog{l: s.l.With(args...)}
+}
+
 func (s *Slog) Debug(ctx context.Context, msg string, args ...any) {
 	s.l.DebugContext(ctx, msg, args...)
 }

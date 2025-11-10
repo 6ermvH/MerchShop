@@ -53,7 +53,9 @@ func TestRegister(t *testing.T) {
 			if err := hasher.CheckPassword(passwordHash, authReq.Password); err != nil {
 				t.Fatalf("password hash doesn't verify against original password")
 			}
+
 			user.PasswordHash = passwordHash
+
 			return user, nil
 		})
 
@@ -76,6 +78,7 @@ func TestRegister(t *testing.T) {
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to decode response: %v; body: %s", err, w.Body.String())
 	}
+
 	if resp.Token == "" {
 		t.Fatalf("empty token in response")
 	}
@@ -126,6 +129,7 @@ func TestLogin(t *testing.T) {
 	if err := json.Unmarshal(w.Body.Bytes(), &resp); err != nil {
 		t.Fatalf("failed to decode response: %v; body: %s", err, w.Body.String())
 	}
+
 	if resp.Token == "" {
 		t.Fatalf("empty token in response")
 	}
@@ -193,7 +197,7 @@ func TestDbError(t *testing.T) {
 	}
 
 	repoMock.EXPECT().FindUserByUsername(gomock.Any(), authReq.Username).
-		Return(model.User{}, fmt.Errorf("db error"))
+		Return(model.User{}, errors.New("db error"))
 
 	api := NewAPI(repoMock, j)
 	r := gin.New()
@@ -218,6 +222,7 @@ func TestDbError(t *testing.T) {
 
 func TestRegister_UsernameAlreadyExists(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -228,11 +233,11 @@ func TestRegister_UsernameAlreadyExists(t *testing.T) {
 
 	repoMock.EXPECT().
 		FindUserByUsername(gomock.Any(), authReq.Username).
-		Return(model.User{}, repo.ErrNotFound)
+		Return(model.User{}, fmt.Errorf("find user by username: %w", repo.ErrNotFound))
 
 	repoMock.EXPECT().
 		CreateUser(gomock.Any(), authReq.Username, gomock.AssignableToTypeOf("")).
-		Return(model.User{}, errors.New("unique_violation"))
+		Return(model.User{}, fmt.Errorf("create user: %w", errors.New("unique_violation")))
 
 	api := NewAPI(repoMock, j)
 	r := gin.New()
@@ -257,6 +262,7 @@ func TestRegister_UsernameAlreadyExists(t *testing.T) {
 
 func TestAuth_BadPayload(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -269,6 +275,7 @@ func TestAuth_BadPayload(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, "/api/auth", bytes.NewReader([]byte(`{bad`)))
 	req.Header.Set("Content-Type", "application/json")
+
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 

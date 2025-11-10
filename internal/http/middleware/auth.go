@@ -2,72 +2,57 @@ package middleware
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/6ermvH/MerchShop/gen/openapi"
 	"github.com/6ermvH/MerchShop/internal/jwtutil"
+	"github.com/6ermvH/MerchShop/internal/model"
 	"github.com/6ermvH/MerchShop/internal/repo"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
-const (
-	CtxUserKey = "auth_user"
-)
+const CtxUserKey = "auth_user"
 
 func Auth(hs jwtutil.JWT, repository repo.MerchRepo) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		raw := parseBearer(c.GetHeader("Authorization"))
 		if raw == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing token"})
+			unauth(c, "missing token")
+
 			return
 		}
 
-		ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+		ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second) //nolint:mnd
 		defer cancel()
 
-		claims, err := hs.Parse(raw)
-		if err != nil || claims == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+		name, userID, ok := parseClaims(hs, raw)
+		if !ok {
+			unauth(c, "invalid token")
+
 			return
 		}
 
-		name, ok := claims["name"]
-		if !ok || name == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token: no name"})
-			return
-		}
-
-		sub, ok := claims["sub"]
-		if !ok || sub == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token: no sub"})
-			return
-		}
-
-		userId, err := uuid.Parse(sub.(string))
+		user, ok, err := findUser(ctx, repository, userID)
 		if err != nil {
-			c.AbortWithStatusJSON(
-				http.StatusUnauthorized,
-				gin.H{"error": "invalid token: bad user_id"},
-			)
+			internal(c)
+
 			return
 		}
 
-		user, err := repository.FindUserByID(ctx, userId)
-		if err != nil && err != repo.ErrNotFound {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+		if !ok {
+			unauthJSON(c, openapi.ErrorResponse{Errors: "invalid token"})
+
 			return
-		} else if err == repo.ErrNotFound {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "invalid token"})
 		}
 
-		// TODO: add Validate token
 		if user.Username != name {
-			c.AbortWithStatusJSON(
-				http.StatusUnauthorized,
-				gin.H{"error": "invalid token: name not match"},
-			)
+			unauth(c, "invalid token: name not match")
+
 			return
 		}
 
@@ -81,5 +66,56 @@ func parseBearer(h string) string {
 	if len(h) > len(p) && h[:len(p)] == p {
 		return h[len(p):]
 	}
+
 	return ""
+}
+
+func parseClaims(hs jwtutil.JWT, raw string) (string, uuid.UUID, bool) {
+	claims, err := hs.Parse(raw)
+	if err != nil || claims == nil {
+		return "", uuid.Nil, false
+	}
+
+	nameV, _ := claims["name"].(string)
+	if strings.TrimSpace(nameV) == "" {
+		return "", uuid.Nil, false
+	}
+
+	subV, _ := claims["sub"].(string)
+
+	id, err := uuid.Parse(subV)
+	if err != nil {
+		return "", uuid.Nil, false
+	}
+
+	return nameV, id, true
+}
+
+func findUser(
+	ctx context.Context,
+	r repo.MerchRepo,
+	id uuid.UUID,
+) (model.User, bool, error) {
+	user, err := r.FindUserByID(ctx, id)
+
+	switch {
+	case err == nil:
+		return user, true, nil
+	case errors.Is(err, repo.ErrNotFound):
+		return model.User{}, false, nil
+	default:
+		return model.User{}, false, fmt.Errorf("find user: %w", err)
+	}
+}
+
+func unauth(c *gin.Context, msg string) {
+	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": msg})
+}
+
+func unauthJSON(c *gin.Context, v any) {
+	c.AbortWithStatusJSON(http.StatusUnauthorized, v)
+}
+
+func internal(c *gin.Context) {
+	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
 }

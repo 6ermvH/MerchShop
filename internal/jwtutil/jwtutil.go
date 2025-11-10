@@ -25,10 +25,12 @@ func (hs *HS256) Sign(sub uuid.UUID, name string) (string, error) {
 		"iat": time.Now().Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 	tok, err := token.SignedString(hs.secret)
 	if err != nil {
 		return "", fmt.Errorf("sign JWT: %w", err)
 	}
+
 	return tok, nil
 }
 
@@ -42,14 +44,17 @@ func (hs *HS256) Parse(token string) (jwt.MapClaims, error) {
 		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {
 			return nil, errUnexpectedAlg
 		}
+
 		return hs.secret, nil
 	}, jwt.WithIssuer(hs.iss), jwt.WithAudience(hs.aud))
 	if err != nil || !tok.Valid {
 		return nil, fmt.Errorf("invalid JWT: %w", err)
 	}
+
 	claims, ok := tok.Claims.(jwt.MapClaims)
 	if !ok {
 		return nil, fmt.Errorf("invalid JWT: %w", errBadClaims)
 	}
+
 	return claims, nil
 }

@@ -21,22 +21,27 @@ func main() {
 	ctx := logx.IntoContext(context.Background(), logx.NewSlog(logger))
 
 	port := getenv("PORT", "8080")
+
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		logger.Error("DATABASE_URL is empty; set DATABASE_URL or use docker-compose")
 		os.Exit(1)
 	}
+
 	jwtSecret := getenv("JWT_SECRET", "dev-secret")
 	jwtIss := getenv("JWT_ISS", "merch-shop")
 	jwtAud := getenv("JWT_AUD", "merch-shop-client")
 
-	connCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	connCtx, cancel := context.WithTimeout(ctx, 5*time.Second) //nolint:mnd
 	defer cancel()
+
 	pool, err := db.NewPool(connCtx, dsn)
 	if err != nil {
 		logger.Error("failed to connect to Postgres", slog.String("error", err.Error()))
-		os.Exit(1)
+
+		return
 	}
+
 	defer pool.Close()
 
 	repositories := repo.NewRepo(pool)
@@ -52,9 +57,11 @@ func main() {
 	api.RegisterRoutes(r)
 
 	logger.Info("http server starting", slog.String("addr", ":"+port))
+
 	if err := r.Run(":" + port); err != nil {
 		logger.Error("http server stopped", slog.String("error", err.Error()))
-		os.Exit(1)
+
+		return
 	}
 }
 
@@ -62,5 +69,6 @@ func getenv(key, def string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
 	}
+
 	return def
 }

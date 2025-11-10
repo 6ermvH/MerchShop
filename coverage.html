@@ -1,0 +1,1619 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/6ermvH/MerchShop/cmd/api/main.go (0.0%)</option>
+				
+				<option value="file1">github.com/6ermvH/MerchShop/gen/mock/handlers/mock_handlers.go (0.0%)</option>
+				
+				<option value="file2">github.com/6ermvH/MerchShop/gen/mock/repo/mock_repo.go (67.4%)</option>
+				
+				<option value="file3">github.com/6ermvH/MerchShop/gen/openapi/routers.go (0.0%)</option>
+				
+				<option value="file4">github.com/6ermvH/MerchShop/internal/db/pool.go (0.0%)</option>
+				
+				<option value="file5">github.com/6ermvH/MerchShop/internal/hasher/hasher.go (100.0%)</option>
+				
+				<option value="file6">github.com/6ermvH/MerchShop/internal/http/handlers/auth.go (84.6%)</option>
+				
+				<option value="file7">github.com/6ermvH/MerchShop/internal/http/handlers/buy.go (73.3%)</option>
+				
+				<option value="file8">github.com/6ermvH/MerchShop/internal/http/handlers/handlers.go (100.0%)</option>
+				
+				<option value="file9">github.com/6ermvH/MerchShop/internal/http/handlers/info.go (100.0%)</option>
+				
+				<option value="file10">github.com/6ermvH/MerchShop/internal/http/handlers/send.go (100.0%)</option>
+				
+				<option value="file11">github.com/6ermvH/MerchShop/internal/http/middleware/auth.go (68.4%)</option>
+				
+				<option value="file12">github.com/6ermvH/MerchShop/internal/http/middleware/log.go (0.0%)</option>
+				
+				<option value="file13">github.com/6ermvH/MerchShop/internal/http/middleware/request_id.go (0.0%)</option>
+				
+				<option value="file14">github.com/6ermvH/MerchShop/internal/jwtutil/jwtutil.go (76.5%)</option>
+				
+				<option value="file15">github.com/6ermvH/MerchShop/internal/logx/context.go (0.0%)</option>
+				
+				<option value="file16">github.com/6ermvH/MerchShop/internal/logx/slogadapter.go (0.0%)</option>
+				
+				<option value="file17">github.com/6ermvH/MerchShop/internal/repo/orders.go (0.0%)</option>
+				
+				<option value="file18">github.com/6ermvH/MerchShop/internal/repo/products.go (0.0%)</option>
+				
+				<option value="file19">github.com/6ermvH/MerchShop/internal/repo/repo.go (0.0%)</option>
+				
+				<option value="file20">github.com/6ermvH/MerchShop/internal/repo/transfers.go (0.0%)</option>
+				
+				<option value="file21">github.com/6ermvH/MerchShop/internal/repo/tx.go (0.0%)</option>
+				
+				<option value="file22">github.com/6ermvH/MerchShop/internal/repo/users.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "log/slog"
+        "net/http"
+        "os"
+        "time"
+
+        "github.com/6ermvH/MerchShop/internal/db"
+        "github.com/6ermvH/MerchShop/internal/http/handlers"
+        "github.com/6ermvH/MerchShop/internal/http/middleware"
+        "github.com/6ermvH/MerchShop/internal/jwtutil"
+        "github.com/6ermvH/MerchShop/internal/logx"
+        "github.com/6ermvH/MerchShop/internal/repo"
+        "github.com/gin-gonic/gin"
+)
+
+func main() <span class="cov0" title="0">{
+        logger := slog.New(slog.NewJSONHandler(os.Stdout, &amp;slog.HandlerOptions{Level: slog.LevelInfo}))
+        ctx := logx.IntoContext(context.Background(), logx.NewSlog(logger))
+
+        port := getenv("PORT", "8080")
+        dsn := os.Getenv("DATABASE_URL")
+        if dsn == "" </span><span class="cov0" title="0">{
+                logger.Error("DATABASE_URL is empty; set DATABASE_URL or use docker-compose")
+                os.Exit(1)
+        }</span>
+        <span class="cov0" title="0">jwtSecret := getenv("JWT_SECRET", "dev-secret")
+        jwtIss := getenv("JWT_ISS", "merch-shop")
+        jwtAud := getenv("JWT_AUD", "merch-shop-client")
+
+        connCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+        defer cancel()
+        pool, err := db.NewPool(connCtx, dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("failed to connect to Postgres", slog.String("error", err.Error()))
+                os.Exit(1)
+        }</span>
+        <span class="cov0" title="0">defer pool.Close()
+
+        repositories := repo.NewRepo(pool)
+        hs := jwtutil.NewHS256(jwtSecret, jwtIss, jwtAud)
+
+        gin.SetMode(gin.ReleaseMode)
+        r := gin.New()
+        r.Use(gin.Logger(), gin.Recovery(), middleware.RequestId())
+
+        r.GET("/healthz", func(c *gin.Context) </span><span class="cov0" title="0">{ c.String(http.StatusOK, "ok") }</span>)
+
+        <span class="cov0" title="0">api := handlers.NewAPI(repositories, hs)
+        api.RegisterRoutes(r)
+
+        logger.Info("http server starting", slog.String("addr", ":"+port))
+        if err := r.Run(":" + port); err != nil </span><span class="cov0" title="0">{
+                logger.Error("http server stopped", slog.String("error", err.Error()))
+                os.Exit(1)
+        }</span>
+}
+
+func getenv(key, def string) string <span class="cov0" title="0">{
+        if v := os.Getenv(key); v != "" </span><span class="cov0" title="0">{
+                return v
+        }</span>
+        <span class="cov0" title="0">return def</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: ../../../gen/openapi/api_default.go
+
+// Package mock_handlers is a generated GoMock package.
+package mock_handlers
+
+import (
+        reflect "reflect"
+
+        gin "github.com/gin-gonic/gin"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockDefaultAPI is a mock of DefaultAPI interface.
+type MockDefaultAPI struct {
+        ctrl     *gomock.Controller
+        recorder *MockDefaultAPIMockRecorder
+}
+
+// MockDefaultAPIMockRecorder is the mock recorder for MockDefaultAPI.
+type MockDefaultAPIMockRecorder struct {
+        mock *MockDefaultAPI
+}
+
+// NewMockDefaultAPI creates a new mock instance.
+func NewMockDefaultAPI(ctrl *gomock.Controller) *MockDefaultAPI <span class="cov0" title="0">{
+        mock := &amp;MockDefaultAPI{ctrl: ctrl}
+        mock.recorder = &amp;MockDefaultAPIMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockDefaultAPI) EXPECT() *MockDefaultAPIMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// ApiAuthPost mocks base method.
+func (m *MockDefaultAPI) ApiAuthPost(c *gin.Context) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        m.ctrl.Call(m, "ApiAuthPost", c)
+}</span>
+
+// ApiAuthPost indicates an expected call of ApiAuthPost.
+func (mr *MockDefaultAPIMockRecorder) ApiAuthPost(c interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApiAuthPost", reflect.TypeOf((*MockDefaultAPI)(nil).ApiAuthPost), c)
+}</span>
+
+// ApiBuyItemGet mocks base method.
+func (m *MockDefaultAPI) ApiBuyItemGet(c *gin.Context) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        m.ctrl.Call(m, "ApiBuyItemGet", c)
+}</span>
+
+// ApiBuyItemGet indicates an expected call of ApiBuyItemGet.
+func (mr *MockDefaultAPIMockRecorder) ApiBuyItemGet(c interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApiBuyItemGet", reflect.TypeOf((*MockDefaultAPI)(nil).ApiBuyItemGet), c)
+}</span>
+
+// ApiInfoGet mocks base method.
+func (m *MockDefaultAPI) ApiInfoGet(c *gin.Context) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        m.ctrl.Call(m, "ApiInfoGet", c)
+}</span>
+
+// ApiInfoGet indicates an expected call of ApiInfoGet.
+func (mr *MockDefaultAPIMockRecorder) ApiInfoGet(c interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApiInfoGet", reflect.TypeOf((*MockDefaultAPI)(nil).ApiInfoGet), c)
+}</span>
+
+// ApiSendCoinPost mocks base method.
+func (m *MockDefaultAPI) ApiSendCoinPost(c *gin.Context) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        m.ctrl.Call(m, "ApiSendCoinPost", c)
+}</span>
+
+// ApiSendCoinPost indicates an expected call of ApiSendCoinPost.
+func (mr *MockDefaultAPIMockRecorder) ApiSendCoinPost(c interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ApiSendCoinPost", reflect.TypeOf((*MockDefaultAPI)(nil).ApiSendCoinPost), c)
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: port.go
+
+// Package mock_repo is a generated GoMock package.
+package mock_repo
+
+import (
+        context "context"
+        reflect "reflect"
+
+        model "github.com/6ermvH/MerchShop/internal/model"
+        gomock "github.com/golang/mock/gomock"
+        uuid "github.com/google/uuid"
+)
+
+// MockMerchRepo is a mock of MerchRepo interface.
+type MockMerchRepo struct {
+        ctrl     *gomock.Controller
+        recorder *MockMerchRepoMockRecorder
+}
+
+// MockMerchRepoMockRecorder is the mock recorder for MockMerchRepo.
+type MockMerchRepoMockRecorder struct {
+        mock *MockMerchRepo
+}
+
+// NewMockMerchRepo creates a new mock instance.
+func NewMockMerchRepo(ctrl *gomock.Controller) *MockMerchRepo <span class="cov9" title="36">{
+        mock := &amp;MockMerchRepo{ctrl: ctrl}
+        mock.recorder = &amp;MockMerchRepoMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockMerchRepo) EXPECT() *MockMerchRepoMockRecorder <span class="cov10" title="54">{
+        return m.recorder
+}</span>
+
+// AddToBalance mocks base method.
+func (m *MockMerchRepo) AddToBalance(ctx context.Context, userId uuid.UUID, delta int64) (model.User, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "AddToBalance", ctx, userId, delta)
+        ret0, _ := ret[0].(model.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// AddToBalance indicates an expected call of AddToBalance.
+func (mr *MockMerchRepoMockRecorder) AddToBalance(ctx, userId, delta interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddToBalance", reflect.TypeOf((*MockMerchRepo)(nil).AddToBalance), ctx, userId, delta)
+}</span>
+
+// BuyProduct mocks base method.
+func (m *MockMerchRepo) BuyProduct(ctx context.Context, userId uuid.UUID, productTitle string) error <span class="cov6" title="14">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "BuyProduct", ctx, userId, productTitle)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// BuyProduct indicates an expected call of BuyProduct.
+func (mr *MockMerchRepoMockRecorder) BuyProduct(ctx, userId, productTitle interface{}) *gomock.Call <span class="cov6" title="14">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BuyProduct", reflect.TypeOf((*MockMerchRepo)(nil).BuyProduct), ctx, userId, productTitle)
+}</span>
+
+// CreateOrder mocks base method.
+func (m *MockMerchRepo) CreateOrder(ctx context.Context, userId, productId uuid.UUID) (model.Order, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateOrder", ctx, userId, productId)
+        ret0, _ := ret[0].(model.Order)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// CreateOrder indicates an expected call of CreateOrder.
+func (mr *MockMerchRepoMockRecorder) CreateOrder(ctx, userId, productId interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockMerchRepo)(nil).CreateOrder), ctx, userId, productId)
+}</span>
+
+// CreateTransfer mocks base method.
+func (m *MockMerchRepo) CreateTransfer(ctx context.Context, fromID, toID uuid.UUID, amount int64) (model.Transfer, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateTransfer", ctx, fromID, toID, amount)
+        ret0, _ := ret[0].(model.Transfer)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// CreateTransfer indicates an expected call of CreateTransfer.
+func (mr *MockMerchRepoMockRecorder) CreateTransfer(ctx, fromID, toID, amount interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransfer", reflect.TypeOf((*MockMerchRepo)(nil).CreateTransfer), ctx, fromID, toID, amount)
+}</span>
+
+// CreateUser mocks base method.
+func (m *MockMerchRepo) CreateUser(ctx context.Context, username, passwordHash string) (model.User, error) <span class="cov2" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateUser", ctx, username, passwordHash)
+        ret0, _ := ret[0].(model.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// CreateUser indicates an expected call of CreateUser.
+func (mr *MockMerchRepoMockRecorder) CreateUser(ctx, username, passwordHash interface{}) *gomock.Call <span class="cov2" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockMerchRepo)(nil).CreateUser), ctx, username, passwordHash)
+}</span>
+
+// FindOrdersByUserID mocks base method.
+func (m *MockMerchRepo) FindOrdersByUserID(ctx context.Context, userId uuid.UUID) ([]model.Order, error) <span class="cov4" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindOrdersByUserID", ctx, userId)
+        ret0, _ := ret[0].([]model.Order)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindOrdersByUserID indicates an expected call of FindOrdersByUserID.
+func (mr *MockMerchRepoMockRecorder) FindOrdersByUserID(ctx, userId interface{}) *gomock.Call <span class="cov4" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrdersByUserID", reflect.TypeOf((*MockMerchRepo)(nil).FindOrdersByUserID), ctx, userId)
+}</span>
+
+// FindProductByTitle mocks base method.
+func (m *MockMerchRepo) FindProductByTitle(ctx context.Context, title string) (model.Product, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindProductByTitle", ctx, title)
+        ret0, _ := ret[0].(model.Product)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindProductByTitle indicates an expected call of FindProductByTitle.
+func (mr *MockMerchRepoMockRecorder) FindProductByTitle(ctx, title interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProductByTitle", reflect.TypeOf((*MockMerchRepo)(nil).FindProductByTitle), ctx, title)
+}</span>
+
+// FindTransfersFromID mocks base method.
+func (m *MockMerchRepo) FindTransfersFromID(ctx context.Context, fromID uuid.UUID) ([]model.Transfer, error) <span class="cov3" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindTransfersFromID", ctx, fromID)
+        ret0, _ := ret[0].([]model.Transfer)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindTransfersFromID indicates an expected call of FindTransfersFromID.
+func (mr *MockMerchRepoMockRecorder) FindTransfersFromID(ctx, fromID interface{}) *gomock.Call <span class="cov3" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTransfersFromID", reflect.TypeOf((*MockMerchRepo)(nil).FindTransfersFromID), ctx, fromID)
+}</span>
+
+// FindTransfersToID mocks base method.
+func (m *MockMerchRepo) FindTransfersToID(ctx context.Context, toID uuid.UUID) ([]model.Transfer, error) <span class="cov2" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindTransfersToID", ctx, toID)
+        ret0, _ := ret[0].([]model.Transfer)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindTransfersToID indicates an expected call of FindTransfersToID.
+func (mr *MockMerchRepoMockRecorder) FindTransfersToID(ctx, toID interface{}) *gomock.Call <span class="cov2" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTransfersToID", reflect.TypeOf((*MockMerchRepo)(nil).FindTransfersToID), ctx, toID)
+}</span>
+
+// FindUserByID mocks base method.
+func (m *MockMerchRepo) FindUserByID(ctx context.Context, id uuid.UUID) (model.User, error) <span class="cov7" title="16">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindUserByID", ctx, id)
+        ret0, _ := ret[0].(model.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindUserByID indicates an expected call of FindUserByID.
+func (mr *MockMerchRepoMockRecorder) FindUserByID(ctx, id interface{}) *gomock.Call <span class="cov7" title="16">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserByID", reflect.TypeOf((*MockMerchRepo)(nil).FindUserByID), ctx, id)
+}</span>
+
+// FindUserByUsername mocks base method.
+func (m *MockMerchRepo) FindUserByUsername(ctx context.Context, username string) (model.User, error) <span class="cov6" title="10">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindUserByUsername", ctx, username)
+        ret0, _ := ret[0].(model.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// FindUserByUsername indicates an expected call of FindUserByUsername.
+func (mr *MockMerchRepoMockRecorder) FindUserByUsername(ctx, username interface{}) *gomock.Call <span class="cov6" title="10">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserByUsername", reflect.TypeOf((*MockMerchRepo)(nil).FindUserByUsername), ctx, username)
+}</span>
+
+// SendCoins mocks base method.
+func (m *MockMerchRepo) SendCoins(ctx context.Context, fromID, toID uuid.UUID, amount int64) error <span class="cov3" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "SendCoins", ctx, fromID, toID, amount)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// SendCoins indicates an expected call of SendCoins.
+func (mr *MockMerchRepoMockRecorder) SendCoins(ctx, fromID, toID, amount interface{}) *gomock.Call <span class="cov3" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoins", reflect.TypeOf((*MockMerchRepo)(nil).SendCoins), ctx, fromID, toID, amount)
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">/*
+ * API Avito shop
+ *
+ * No description provided (generated by Openapi Generator https://github.com/openapitools/openapi-generator)
+ *
+ * API version: 1.0.0
+ * Generated by: OpenAPI Generator (https://openapi-generator.tech)
+ */
+
+package openapi
+
+import (
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+// Route is the information for every URI.
+type Route struct {
+        // Name is the name of this Route.
+        Name                string
+        // Method is the string for the HTTP method. ex) GET, POST etc..
+        Method                string
+        // Pattern is the pattern of the URI.
+        Pattern                 string
+        // HandlerFunc is the handler function of this route.
+        HandlerFunc        gin.HandlerFunc
+}
+
+// NewRouter returns a new router.
+func NewRouter(handleFunctions ApiHandleFunctions) *gin.Engine <span class="cov0" title="0">{
+        return NewRouterWithGinEngine(gin.Default(), handleFunctions)
+}</span>
+
+// NewRouter add routes to existing gin engine.
+func NewRouterWithGinEngine(router *gin.Engine, handleFunctions ApiHandleFunctions) *gin.Engine <span class="cov0" title="0">{
+        for _, route := range getRoutes(handleFunctions) </span><span class="cov0" title="0">{
+                if route.HandlerFunc == nil </span><span class="cov0" title="0">{
+                        route.HandlerFunc = DefaultHandleFunc
+                }</span>
+                <span class="cov0" title="0">switch route.Method </span>{
+                case http.MethodGet:<span class="cov0" title="0">
+                        router.GET(route.Pattern, route.HandlerFunc)</span>
+                case http.MethodPost:<span class="cov0" title="0">
+                        router.POST(route.Pattern, route.HandlerFunc)</span>
+                case http.MethodPut:<span class="cov0" title="0">
+                        router.PUT(route.Pattern, route.HandlerFunc)</span>
+                case http.MethodPatch:<span class="cov0" title="0">
+                        router.PATCH(route.Pattern, route.HandlerFunc)</span>
+                case http.MethodDelete:<span class="cov0" title="0">
+                        router.DELETE(route.Pattern, route.HandlerFunc)</span>
+                }
+        }
+
+        <span class="cov0" title="0">return router</span>
+}
+
+// Default handler for not yet implemented routes
+func DefaultHandleFunc(c *gin.Context) <span class="cov0" title="0">{
+        c.String(http.StatusNotImplemented, "501 not implemented")
+}</span>
+
+type ApiHandleFunctions struct {
+
+        // Routes for the DefaultAPI part of the API
+        DefaultAPI DefaultAPI
+}
+
+func getRoutes(handleFunctions ApiHandleFunctions) []Route <span class="cov0" title="0">{
+        return []Route{ 
+                {
+                        "ApiAuthPost",
+                        http.MethodPost,
+                        "/api/auth",
+                        handleFunctions.DefaultAPI.ApiAuthPost,
+                },
+                {
+                        "ApiBuyItemGet",
+                        http.MethodGet,
+                        "/api/buy/:item",
+                        handleFunctions.DefaultAPI.ApiBuyItemGet,
+                },
+                {
+                        "ApiInfoGet",
+                        http.MethodGet,
+                        "/api/info",
+                        handleFunctions.DefaultAPI.ApiInfoGet,
+                },
+                {
+                        "ApiSendCoinPost",
+                        http.MethodPost,
+                        "/api/sendCoin",
+                        handleFunctions.DefaultAPI.ApiSendCoinPost,
+                },
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package db
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+)
+
+func NewPool(ctx context.Context, dsn string) (*pgxpool.Pool, error) <span class="cov0" title="0">{
+        pool, err := pgxpool.New(ctx, dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("connect to db: %w", err)
+        }</span>
+        <span class="cov0" title="0">return pool, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package hasher
+
+import "golang.org/x/crypto/bcrypt"
+
+func HashPassword(pw string) (string, error) <span class="cov10" title="12">{
+        hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+        return string(hash), err
+}</span>
+
+func CheckPassword(hash, pw string) error <span class="cov7" title="6">{
+        return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package handlers
+
+import (
+        "context"
+        "net/http"
+        "time"
+
+        "github.com/6ermvH/MerchShop/gen/openapi"
+        "github.com/6ermvH/MerchShop/internal/hasher"
+        "github.com/6ermvH/MerchShop/internal/repo"
+        "github.com/gin-gonic/gin"
+)
+
+// TODO: add logs
+func (api *API) ApiAuthPost(c *gin.Context) <span class="cov10" title="6">{
+        var request openapi.AuthRequest
+        if err := c.ShouldBindJSON(&amp;request); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+                return
+        }</span>
+
+        <span class="cov9" title="5">ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+        defer cancel()
+
+        user, err := api.repos.FindUserByUsername(ctx, request.Username)
+        switch err </span>{
+        case nil:<span class="cov4" title="2">
+                if err := hasher.CheckPassword(user.PasswordHash, request.Password); err != nil </span><span class="cov1" title="1">{
+                        c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "invalid credentials"})
+                        return
+                }</span>
+        case repo.ErrNotFound:<span class="cov4" title="2">
+                hash, err := hasher.HashPassword(request.Password)
+                if err != nil </span><span class="cov0" title="0">{
+                        c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "hash error"})
+                        return
+                }</span>
+                <span class="cov4" title="2">user, err = api.repos.CreateUser(ctx, request.Username, hash)
+                if err != nil </span><span class="cov1" title="1">{
+                        c.JSON(http.StatusConflict, openapi.ErrorResponse{Errors: "username already exists"})
+                        return
+                }</span>
+        default:<span class="cov1" title="1">
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return</span>
+        }
+
+        <span class="cov4" title="2">tok, err := api.hs.Sign(user.ID, user.Username)
+        if err != nil </span><span class="cov0" title="0">{
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "sign JWT"})
+                return
+        }</span>
+
+        <span class="cov4" title="2">c.JSON(http.StatusOK, openapi.AuthResponse{
+                Token: tok,
+        })</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package handlers
+
+import (
+        "context"
+        "net/http"
+        "time"
+
+        "github.com/6ermvH/MerchShop/gen/openapi"
+        "github.com/6ermvH/MerchShop/internal/http/middleware"
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/gin-gonic/gin"
+)
+
+// TODO: add logs, error wrapping
+func (api *API) ApiBuyItemGet(c *gin.Context) <span class="cov10" title="14">{
+        product := c.Param("item")
+        if product == "" </span><span class="cov0" title="0">{
+                c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "empty item"})
+                return
+        }</span>
+
+        <span class="cov10" title="14">userRaw, ok := c.Get(middleware.CtxUserKey)
+        if !ok </span><span class="cov0" title="0">{
+                c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "no user in context"})
+                return
+        }</span>
+        <span class="cov10" title="14">user, _ := userRaw.(model.User)
+
+        ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+        defer cancel()
+
+        if err := api.repos.BuyProduct(ctx, user.ID, product); err != nil </span><span class="cov5" title="4">{
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return
+        }</span>
+
+        <span class="cov8" title="10">c.Status(http.StatusOK)</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">//go:generate openapi-generator generate -i ../../../schema.yaml -g go-gin-server -o ../../../gen -p apiPath=openapi,interfaceOnly=true,packageName=openapi,hideGenerationTimestamp=true
+//go:generate mockgen -source=../../../gen/openapi/api_default.go -destination=../../../gen/mock/handlers/mock_handlers.go -package=mock_handlers
+
+package handlers
+
+import (
+        "github.com/6ermvH/MerchShop/internal/http/middleware"
+        "github.com/6ermvH/MerchShop/internal/jwtutil"
+        "github.com/6ermvH/MerchShop/internal/repo"
+        "github.com/gin-gonic/gin"
+)
+
+type API struct {
+        repos repo.MerchRepo
+        hs    jwtutil.JWT
+}
+
+func NewAPI(repo repo.MerchRepo, hs jwtutil.JWT) *API <span class="cov10" title="33">{
+        return &amp;API{
+                repos: repo,
+                hs:    hs,
+        }
+}</span>
+
+func (api *API) RegisterRoutes(r *gin.Engine) <span class="cov5" title="6">{
+        r.POST("/api/auth", api.ApiAuthPost)
+
+        apiG := r.Group("/api", middleware.Auth(api.hs, api.repos))
+        </span><span class="cov5" title="6">{
+                apiG.GET("/buy/:item", api.ApiBuyItemGet)
+                apiG.GET("/info", api.ApiInfoGet)
+                apiG.POST("/sendCoin", api.ApiSendCoinPost)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package handlers
+
+import (
+        "context"
+        "net/http"
+        "time"
+
+        "github.com/6ermvH/MerchShop/gen/openapi"
+        "github.com/6ermvH/MerchShop/internal/http/middleware"
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/gin-gonic/gin"
+)
+
+func (api *API) ApiInfoGet(c *gin.Context) <span class="cov10" title="5">{
+        userRaw, ok := c.Get(middleware.CtxUserKey)
+        if !ok </span><span class="cov1" title="1">{
+                c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "no user in context"})
+                return
+        }</span>
+        <span class="cov8" title="4">user := userRaw.(model.User)
+
+        ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+        defer cancel()
+
+        orders, err := api.repos.FindOrdersByUserID(ctx, user.ID)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return
+        }</span>
+        <span class="cov7" title="3">inventory := makeInfoResponseInventory(orders)
+
+        recv, err := api.repos.FindTransfersFromID(ctx, user.ID)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return
+        }</span>
+        <span class="cov4" title="2">coinHistoryFrom := make([]openapi.InfoResponseCoinHistoryReceivedInner, 0)
+        for _, rec := range recv </span><span class="cov4" title="2">{
+                coinHistoryFrom = append(coinHistoryFrom,
+                        openapi.InfoResponseCoinHistoryReceivedInner{
+                                FromUser: rec.FromUserName,
+                                Amount:   int32(rec.Amount),
+                        })
+        }</span>
+
+        <span class="cov4" title="2">sent, err := api.repos.FindTransfersToID(ctx, user.ID)
+        if err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return
+        }</span>
+        <span class="cov1" title="1">coinHistoryTo := make([]openapi.InfoResponseCoinHistorySentInner, 0)
+        for _, sen := range sent </span><span class="cov1" title="1">{
+                coinHistoryTo = append(coinHistoryTo,
+                        openapi.InfoResponseCoinHistorySentInner{
+                                ToUser: sen.ToUserName,
+                                Amount: int32(sen.Amount),
+                        })
+        }</span>
+
+        <span class="cov1" title="1">response := openapi.InfoResponse{
+                Coins:     int32(user.Balance),
+                Inventory: inventory,
+                CoinHistory: openapi.InfoResponseCoinHistory{
+                        Received: coinHistoryFrom,
+                        Sent:     coinHistoryTo,
+                },
+        }
+
+        c.JSON(http.StatusOK, response)</span>
+}
+
+type productName string
+
+func makeInfoResponseInventory(orders []model.Order) []openapi.InfoResponseInventoryInner <span class="cov7" title="3">{
+        inventory := make([]openapi.InfoResponseInventoryInner, 0)
+        productCounter := make(map[productName]int)
+
+        for _, order := range orders </span><span class="cov10" title="5">{
+                productCounter[productName(order.ProductTitle)]++
+        }</span>
+
+        <span class="cov7" title="3">for title, count := range productCounter </span><span class="cov8" title="4">{
+                inventory = append(inventory,
+                        openapi.InfoResponseInventoryInner{
+                                Type:     string(title),
+                                Quantity: int32(count),
+                        })
+        }</span>
+
+        <span class="cov7" title="3">return inventory</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package handlers
+
+import (
+        "context"
+        "errors"
+        "net/http"
+        "strings"
+        "time"
+
+        "github.com/6ermvH/MerchShop/gen/openapi"
+        "github.com/6ermvH/MerchShop/internal/http/middleware"
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/6ermvH/MerchShop/internal/repo"
+        "github.com/gin-gonic/gin"
+)
+
+func (api *API) ApiSendCoinPost(c *gin.Context) <span class="cov10" title="11">{
+        var request openapi.SendCoinRequest
+        if err := c.ShouldBindJSON(&amp;request); err != nil </span><span class="cov1" title="1">{
+                c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+                return
+        }</span>
+        <span class="cov9" title="10">if strings.TrimSpace(request.ToUser) == "" || request.Amount &lt;= 0 </span><span class="cov6" title="4">{
+                c.JSON(http.StatusBadRequest, openapi.ErrorResponse{Errors: "bad payload"})
+                return
+        }</span>
+
+        <span class="cov7" title="6">userRaw, ok := c.Get(middleware.CtxUserKey)
+        if !ok </span><span class="cov1" title="1">{
+                c.JSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "no user in context"})
+                return
+        }</span>
+        <span class="cov7" title="5">user := userRaw.(model.User)
+
+        ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
+        defer cancel()
+
+        to, err := api.repos.FindUserByUsername(ctx, request.ToUser)
+        if err != nil </span><span class="cov3" title="2">{
+                if errors.Is(err, repo.ErrNotFound) </span><span class="cov1" title="1">{
+                        c.JSON(http.StatusNotFound, openapi.ErrorResponse{Errors: "receiver not found"})
+                        return
+                }</span>
+                <span class="cov1" title="1">c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+                return</span>
+        }
+
+        <span class="cov5" title="3">if err := api.repos.SendCoins(ctx, user.ID, to.ID, int64(request.Amount)); err != nil </span><span class="cov3" title="2">{
+                switch </span>{
+                case strings.Contains(err.Error(), "insufficient funds"):<span class="cov1" title="1">
+                        c.JSON(
+                                http.StatusUnprocessableEntity,
+                                openapi.ErrorResponse{Errors: "insufficient funds"},
+                        )</span>
+                default:<span class="cov1" title="1">
+                        c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: err.Error()})</span>
+                }
+                <span class="cov3" title="2">return</span>
+        }
+
+        <span class="cov1" title="1">c.Status(http.StatusOK)</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package middleware
+
+import (
+        "context"
+        "net/http"
+        "time"
+
+        "github.com/6ermvH/MerchShop/gen/openapi"
+        "github.com/6ermvH/MerchShop/internal/jwtutil"
+        "github.com/6ermvH/MerchShop/internal/repo"
+        "github.com/gin-gonic/gin"
+        "github.com/google/uuid"
+)
+
+const (
+        CtxUserKey = "auth_user"
+)
+
+func Auth(hs jwtutil.JWT, repository repo.MerchRepo) gin.HandlerFunc <span class="cov10" title="23">{
+        return func(c *gin.Context) </span><span class="cov9" title="17">{
+                raw := parseBearer(c.GetHeader("Authorization"))
+                if raw == "" </span><span class="cov1" title="1">{
+                        c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "missing token"})
+                        return
+                }</span>
+
+                <span class="cov8" title="16">ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+                defer cancel()
+
+                claims, err := hs.Parse(raw)
+                if err != nil || claims == nil </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+                        return
+                }</span>
+
+                <span class="cov8" title="16">name, ok := claims["name"]
+                if !ok || name == "" </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token: no name"})
+                        return
+                }</span>
+
+                <span class="cov8" title="16">sub, ok := claims["sub"]
+                if !ok || sub == "" </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token: no sub"})
+                        return
+                }</span>
+
+                <span class="cov8" title="16">userId, err := uuid.Parse(sub.(string))
+                if err != nil </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(
+                                http.StatusUnauthorized,
+                                gin.H{"error": "invalid token: bad user_id"},
+                        )
+                        return
+                }</span>
+
+                <span class="cov8" title="16">user, err := repository.FindUserByID(ctx, userId)
+                if err != nil &amp;&amp; err != repo.ErrNotFound </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+                        return
+                }</span> else<span class="cov8" title="16"> if err == repo.ErrNotFound </span><span class="cov1" title="1">{
+                        c.AbortWithStatusJSON(http.StatusUnauthorized, openapi.ErrorResponse{Errors: "invalid token"})
+                }</span>
+
+                // TODO: add Validate token
+                <span class="cov8" title="16">if user.Username != name </span><span class="cov0" title="0">{
+                        c.AbortWithStatusJSON(
+                                http.StatusUnauthorized,
+                                gin.H{"error": "invalid token: name not match"},
+                        )
+                        return
+                }</span>
+
+                <span class="cov8" title="16">c.Set(CtxUserKey, user)
+                c.Next()</span>
+        }
+}
+
+func parseBearer(h string) string <span class="cov9" title="20">{
+        const p = "Bearer "
+        if len(h) &gt; len(p) &amp;&amp; h[:len(p)] == p </span><span class="cov9" title="17">{
+                return h[len(p):]
+        }</span>
+        <span class="cov4" title="3">return ""</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package middleware
+
+import (
+        "time"
+
+        "github.com/6ermvH/MerchShop/internal/logx"
+        "github.com/gin-gonic/gin"
+)
+
+// TODO: add Debug logs
+func Log(lg logx.Logger) gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                rid, _ := c.Get(CtxRequestId)
+                l := lg.With(
+                        "rid", rid,
+                        "method", c.Request.Method,
+                        "path", c.Request.URL.Path,
+                        "ip", c.ClientIP(),
+                )
+
+                ctx := logx.IntoContext(c.Request.Context(), l)
+                c.Request = c.Request.WithContext(ctx)
+
+                start := time.Now()
+                c.Next()
+                l.Info(ctx, "request completed",
+                        "status", c.Writer.Status(),
+                        "latency", time.Since(start),
+                        "size", c.Writer.Size(),
+                        "errors", c.Errors.ByType(gin.ErrorTypeAny).String(),
+                )
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package middleware
+
+import (
+        "github.com/gin-gonic/gin"
+        "github.com/google/uuid"
+)
+
+const (
+        CtxRequestId = "request_id"
+)
+
+func RequestId() gin.HandlerFunc <span class="cov0" title="0">{
+        return func(c *gin.Context) </span><span class="cov0" title="0">{
+                id := uuid.NewString()
+                c.Set(CtxRequestId, id)
+                c.Next()
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package jwtutil
+
+import (
+        "errors"
+        "fmt"
+        "time"
+
+        jwt "github.com/golang-jwt/jwt/v5"
+        "github.com/google/uuid"
+)
+
+type HS256 struct {
+        secret   []byte
+        iss, aud string
+}
+
+func NewHS256(secret, iss, aud string) *HS256 <span class="cov10" title="23">{
+        return &amp;HS256{[]byte(secret), iss, aud}
+}</span>
+
+func (hs *HS256) Sign(sub uuid.UUID, name string) (string, error) <span class="cov9" title="18">{
+        claims := jwt.MapClaims{
+                "sub": sub.String(), "name": name,
+                "iss": hs.iss, "aud": hs.aud,
+                "iat": time.Now().Unix(),
+        }
+        token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+        tok, err := token.SignedString(hs.secret)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", fmt.Errorf("sign JWT: %w", err)
+        }</span>
+        <span class="cov9" title="18">return tok, nil</span>
+}
+
+var (
+        errUnexpectedAlg = errors.New("unexpected alg")
+        errBadClaims     = errors.New("bad claims type")
+)
+
+func (hs *HS256) Parse(token string) (jwt.MapClaims, error) <span class="cov8" title="16">{
+        tok, err := jwt.Parse(token, func(t *jwt.Token) (any, error) </span><span class="cov8" title="16">{
+                if t.Method.Alg() != jwt.SigningMethodHS256.Alg() </span><span class="cov0" title="0">{
+                        return nil, errUnexpectedAlg
+                }</span>
+                <span class="cov8" title="16">return hs.secret, nil</span>
+        }, jwt.WithIssuer(hs.iss), jwt.WithAudience(hs.aud))
+        <span class="cov8" title="16">if err != nil || !tok.Valid </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("invalid JWT: %w", err)
+        }</span>
+        <span class="cov8" title="16">claims, ok := tok.Claims.(jwt.MapClaims)
+        if !ok </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("invalid JWT: %w", errBadClaims)
+        }</span>
+        <span class="cov8" title="16">return claims, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package logx
+
+import "context"
+
+type ctxKey struct{}
+
+func IntoContext(ctx context.Context, l Logger) context.Context <span class="cov0" title="0">{
+        return context.WithValue(ctx, ctxKey{}, l)
+}</span>
+
+func FromContext(ctx context.Context) Logger <span class="cov0" title="0">{
+        if v := ctx.Value(ctxKey{}); v != nil </span><span class="cov0" title="0">{
+                if l, ok := v.(Logger); ok &amp;&amp; l != nil </span><span class="cov0" title="0">{
+                        return l
+                }</span>
+        }
+        <span class="cov0" title="0">return Nop{}</span>
+}
+
+type Nop struct{}
+
+func (Nop) With(args ...any) Logger               <span class="cov0" title="0">{ return Nop{} }</span>
+func (Nop) Debug(context.Context, string, ...any) {<span class="cov0" title="0">}</span>
+func (Nop) Info(context.Context, string, ...any)  {<span class="cov0" title="0">}</span>
+func (Nop) Warn(context.Context, string, ...any)  {<span class="cov0" title="0">}</span>
+func (Nop) Error(context.Context, string, ...any) {<span class="cov0" title="0">}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package logx
+
+import (
+        "context"
+        "log/slog"
+)
+
+type Slog struct{ l *slog.Logger }
+
+func NewSlog(l *slog.Logger) *Slog <span class="cov0" title="0">{ return &amp;Slog{l: l} }</span>
+
+func (s *Slog) With(args ...any) Logger <span class="cov0" title="0">{ return &amp;Slog{l: s.l.With(args...)} }</span>
+func (s *Slog) Debug(ctx context.Context, msg string, args ...any) <span class="cov0" title="0">{
+        s.l.DebugContext(ctx, msg, args...)
+}</span>
+
+func (s *Slog) Info(
+        ctx context.Context,
+        msg string,
+        args ...any,
+) <span class="cov0" title="0">{
+        s.l.InfoContext(ctx, msg, args...)
+}</span>
+
+func (s *Slog) Warn(
+        ctx context.Context,
+        msg string,
+        args ...any,
+) <span class="cov0" title="0">{
+        s.l.WarnContext(ctx, msg, args...)
+}</span>
+
+func (s *Slog) Error(ctx context.Context, msg string, args ...any) <span class="cov0" title="0">{
+        s.l.ErrorContext(ctx, msg, args...)
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package repo
+
+import (
+        "context"
+
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/google/uuid"
+)
+
+func (r *Repo) CreateOrder(
+        ctx context.Context,
+        userId, productId uuid.UUID,
+) (model.Order, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var o model.Order
+        err := q.QueryRow(ctx, `
+                INSERT INTO merch_shop.orders (user_id, product_id, count)
+                VALUES ($1, $2, $3)
+                RETURNING id, user_id, product_id, created_at
+        `, userId, productId).Scan(&amp;o.ID, &amp;o.UserID, &amp;o.ProductID, &amp;o.CreatedAt)
+        return o, err
+}</span>
+
+func (r *Repo) FindOrdersByUserID(ctx context.Context, userId uuid.UUID) ([]model.Order, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        rows, err := q.Query(ctx, `
+                SELECT o.id, o.user_id, o.product_id, o.created_at,
+                       p.title AS product_title, p.price AS product_price
+                FROM merch_shop.orders AS o
+                JOIN merch_shop.products AS p ON p.id = o.product_id
+                WHERE o.user_id = $1
+                ORDER BY o.created_at DESC
+        `, userId)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        var orders []model.Order
+        for rows.Next() </span><span class="cov0" title="0">{
+                var o model.Order
+                if err := rows.Scan(&amp;o.ID, &amp;o.UserID, &amp;o.ProductID, &amp;o.CreatedAt, &amp;o.ProductTitle, &amp;o.ProductPrice); err != nil </span><span class="cov0" title="0">{
+                        return orders, err
+                }</span>
+                <span class="cov0" title="0">orders = append(orders, o)</span>
+        }
+        <span class="cov0" title="0">if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return orders, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package repo
+
+import (
+        "context"
+        "errors"
+
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/jackc/pgx/v5"
+)
+
+func (r *Repo) FindProductByTitle(ctx context.Context, title string) (model.Product, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var p model.Product
+        err := q.QueryRow(ctx, `
+                SELECT id, title, price
+                FROM merch_shop.products
+                WHERE lower(title) = lower($1)
+        `, title).Scan(&amp;p.ID, &amp;p.Title, &amp;p.Price)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return model.Product{}, ErrNotFound
+                }</span>
+                <span class="cov0" title="0">return model.Product{}, err</span>
+        }
+        <span class="cov0" title="0">return p, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package repo
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/google/uuid"
+        "github.com/jackc/pgx/v5"
+)
+
+type Repo struct {
+        db DB
+}
+
+func NewRepo(db DB) *Repo <span class="cov0" title="0">{
+        return &amp;Repo{db: db}
+}</span>
+
+func (r *Repo) SendCoins(ctx context.Context, fromUserId, toUserId uuid.UUID, amount int64) error <span class="cov0" title="0">{
+        if amount &lt;= 0 </span><span class="cov0" title="0">{
+                return fmt.Errorf("amount must be positive")
+        }</span>
+        <span class="cov0" title="0">if fromUserId == toUserId </span><span class="cov0" title="0">{
+                return fmt.Errorf("cannot transfer to self")
+        }</span>
+
+        <span class="cov0" title="0">return r.WithTx(ctx, func(txCtx context.Context) error </span><span class="cov0" title="0">{
+                if _, err := r.AddToBalance(txCtx, fromUserId, -amount); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">if _, err := r.AddToBalance(txCtx, toUserId, +amount); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">_, err := r.CreateTransfer(txCtx, fromUserId, toUserId, amount)
+                return err</span>
+        }, &amp;TxOptions{Level: pgx.Serializable, MaxRetries: 10})
+}
+
+func (r *Repo) BuyProduct(
+        ctx context.Context,
+        userId uuid.UUID,
+        productTitle string,
+) error <span class="cov0" title="0">{
+        return r.WithTx(ctx, func(txCtx context.Context) error </span><span class="cov0" title="0">{
+                product, err := r.FindProductByTitle(txCtx, productTitle)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">if _, err := r.AddToBalance(txCtx, userId, -product.Price); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">if _, err := r.CreateOrder(txCtx, userId, product.ID); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">return nil</span>
+        }, &amp;TxOptions{Level: pgx.Serializable, MaxRetries: 10})
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package repo
+
+import (
+        "context"
+
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/google/uuid"
+)
+
+func (r *Repo) CreateTransfer(
+        ctx context.Context,
+        fromID, toID uuid.UUID,
+        amount int64,
+) (model.Transfer, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var t model.Transfer
+        err := q.QueryRow(ctx, `
+                INSERT INTO merch_shop.transfers (from_user_id, to_user_id, amount)
+                VALUES ($1, $2, $3)
+                RETURNING id, from_user_id, to_user_id, amount, created_at
+        `, fromID, toID, amount).Scan(&amp;t.ID, &amp;t.FromUserID, &amp;t.ToUserID, &amp;t.Amount, &amp;t.CreatedAt)
+        return t, err
+}</span>
+
+func (r *Repo) FindTransfersFromID(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        rows, err := q.Query(ctx, `
+                SELECT t.id, t.from_user_id, u.username, t.to_user_id, t.amount, t.created_at
+                FROM merch_shop.transfers AS t
+                JOIN merch_shop.users AS u ON t.from_user_id = u.id
+                WHERE t.from_user_id = $1
+        `, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        var transfers []model.Transfer
+        for rows.Next() </span><span class="cov0" title="0">{
+                var t model.Transfer
+                if err := rows.Scan(&amp;t.ID, &amp;t.FromUserID, &amp;t.FromUserName, &amp;t.ToUserID, &amp;t.Amount, &amp;t.CreatedAt); err != nil </span><span class="cov0" title="0">{
+                        return transfers, err
+                }</span>
+                <span class="cov0" title="0">transfers = append(transfers, t)</span>
+        }
+        <span class="cov0" title="0">if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return transfers, nil</span>
+}
+
+func (r *Repo) FindTransfersToID(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        rows, err := q.Query(ctx, `
+                SELECT t.id, t.from_user_id, t.to_user_id, u.username, t.amount, t.created_at
+                FROM merch_shop.transfers AS t
+                JOIN merch_shop.users AS u ON t.to_user_id = u.id
+                WHERE t.to_user_id = $1
+        `, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        var transfers []model.Transfer
+        for rows.Next() </span><span class="cov0" title="0">{
+                var t model.Transfer
+                if err := rows.Scan(&amp;t.ID, &amp;t.FromUserID, &amp;t.ToUserID, &amp;t.ToUserName, &amp;t.Amount, &amp;t.CreatedAt); err != nil </span><span class="cov0" title="0">{
+                        return transfers, err
+                }</span>
+                <span class="cov0" title="0">transfers = append(transfers, t)</span>
+        }
+        <span class="cov0" title="0">if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return transfers, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package repo
+
+import (
+        "context"
+        "errors"
+        "time"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/jackc/pgx/v5/pgconn"
+)
+
+type Runner interface {
+        Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
+        Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+        QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+}
+
+type Tx interface {
+        Runner
+        Commit(ctx context.Context) error
+        Rollback(ctx context.Context) error
+}
+
+type DB interface {
+        Runner
+        BeginTx(ctx context.Context, txOptions pgx.TxOptions) (pgx.Tx, error)
+}
+
+type txKey struct{}
+
+func (r *Repo) runner(ctx context.Context) Runner <span class="cov0" title="0">{
+        if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok &amp;&amp; tx != nil </span><span class="cov0" title="0">{
+                return tx
+        }</span>
+        <span class="cov0" title="0">return r.db</span>
+}
+
+type TxOptions struct {
+        Level          pgx.TxIsoLevel
+        MaxRetries     int
+        AttemptTimeout time.Duration
+}
+
+func (r *Repo) WithTx(
+        ctx context.Context,
+        fn func(txCtx context.Context) error,
+        opts *TxOptions,
+) error <span class="cov0" title="0">{
+        level := pgx.ReadCommitted
+        retries := 5
+        timeout := time.Duration(0)
+        if opts != nil </span><span class="cov0" title="0">{
+                level = opts.Level
+                if opts.MaxRetries &gt; 0 </span><span class="cov0" title="0">{
+                        retries = opts.MaxRetries
+                }</span>
+                <span class="cov0" title="0">if opts.AttemptTimeout &gt; 0 </span><span class="cov0" title="0">{
+                        timeout = opts.AttemptTimeout
+                }</span>
+        }
+        <span class="cov0" title="0">if tx, ok := ctx.Value(txKey{}).(pgx.Tx); ok &amp;&amp; tx != nil </span><span class="cov0" title="0">{
+                return fn(ctx)
+        }</span>
+
+        <span class="cov0" title="0">for attempt := 0; ; attempt++ </span><span class="cov0" title="0">{
+                inner := ctx
+                var cancel context.CancelFunc
+                if timeout &gt; 0 </span><span class="cov0" title="0">{
+                        inner, cancel = context.WithTimeout(ctx, timeout)
+                        defer cancel()
+                }</span>
+
+                <span class="cov0" title="0">tx, err := r.db.BeginTx(inner, pgx.TxOptions{IsoLevel: level})
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov0" title="0">err = fn(context.WithValue(inner, txKey{}, tx))
+                if err != nil </span><span class="cov0" title="0">{
+                        _ = tx.Rollback(inner)
+                        if isSerialization(err) &amp;&amp; attempt &lt; retries &amp;&amp; level == pgx.Serializable </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+                        <span class="cov0" title="0">return err</span>
+                }
+                <span class="cov0" title="0">if err := tx.Commit(inner); err != nil </span><span class="cov0" title="0">{
+                        if isSerialization(err) &amp;&amp; attempt &lt; retries &amp;&amp; level == pgx.Serializable </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+                        <span class="cov0" title="0">return err</span>
+                }
+                <span class="cov0" title="0">return nil</span>
+        }
+}
+
+func isSerialization(err error) bool <span class="cov0" title="0">{
+        var pgErr *pgconn.PgError
+        return errors.As(err, &amp;pgErr) &amp;&amp; pgErr.Code == "40001"
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package repo
+
+import (
+        "context"
+        "errors"
+        "fmt"
+
+        "github.com/6ermvH/MerchShop/internal/model"
+        "github.com/google/uuid"
+        "github.com/jackc/pgx/v5"
+)
+
+var ErrNotFound = errors.New("not found")
+
+func (r *Repo) FindUserByID(ctx context.Context, id uuid.UUID) (model.User, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var u model.User
+        err := q.QueryRow(ctx, `
+                SELECT id, username, password_hash, balance, created_at
+                FROM merch_shop.users WHERE id=$1
+        `, id).Scan(&amp;u.ID, &amp;u.Username, &amp;u.PasswordHash, &amp;u.Balance, &amp;u.CreatedAt)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return model.User{}, ErrNotFound
+                }</span>
+                <span class="cov0" title="0">return model.User{}, err</span>
+        }
+        <span class="cov0" title="0">return u, nil</span>
+}
+
+func (r *Repo) FindUserByUsername(ctx context.Context, username string) (model.User, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var u model.User
+        err := q.QueryRow(ctx, `
+                SELECT id, username, password_hash, balance, created_at
+                FROM merch_shop.users WHERE username=$1
+        `, username).Scan(&amp;u.ID, &amp;u.Username, &amp;u.PasswordHash, &amp;u.Balance, &amp;u.CreatedAt)
+        if err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return model.User{}, ErrNotFound
+                }</span>
+                <span class="cov0" title="0">return model.User{}, err</span>
+        }
+        <span class="cov0" title="0">return u, nil</span>
+}
+
+func (r *Repo) AddToBalance(
+        ctx context.Context,
+        userId uuid.UUID,
+        delta int64,
+) (model.User, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+
+        var cur int64
+        if err := q.QueryRow(ctx, `
+                SELECT balance FROM merch_shop.users WHERE id=$1 FOR UPDATE
+        `, userId).Scan(&amp;cur); err != nil </span><span class="cov0" title="0">{
+                if errors.Is(err, pgx.ErrNoRows) </span><span class="cov0" title="0">{
+                        return model.User{}, ErrNotFound
+                }</span>
+                <span class="cov0" title="0">return model.User{}, err</span>
+        }
+        <span class="cov0" title="0">newBal := cur + delta
+        if newBal &lt; 0 </span><span class="cov0" title="0">{
+                return model.User{}, fmt.Errorf("insufficient funds")
+        }</span>
+
+        <span class="cov0" title="0">var u model.User
+        err := q.QueryRow(ctx, `
+                UPDATE merch_shop.users
+                SET balance=$2
+                WHERE id=$1
+                RETURNING id, username, password_hash, balance, created_at
+        `, userId, newBal).Scan(&amp;u.ID, &amp;u.Username, &amp;u.PasswordHash, &amp;u.Balance, &amp;u.CreatedAt)
+        return u, err</span>
+}
+
+func (r *Repo) CreateUser(ctx context.Context, username, passwordHash string) (model.User, error) <span class="cov0" title="0">{
+        q := r.runner(ctx)
+        var u model.User
+        err := q.QueryRow(ctx, `
+                INSERT INTO merch_shop.users (username, password_hash)
+                VALUES ($1, $2)
+                RETURNING id, username, password_hash, balance, created_at
+        `, username, passwordHash).Scan(&amp;u.ID, &amp;u.Username, &amp;u.PasswordHash, &amp;u.Balance, &amp;u.CreatedAt)
+        return u, err
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

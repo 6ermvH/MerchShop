@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -27,7 +27,6 @@ func TestBuyItem_OK(t *testing.T) {
 	}
 
 	for _, product := range products {
-
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
@@ -73,7 +72,6 @@ func TestBuyItem_UnknownItem(t *testing.T) {
 	products := []string{"mackbook", "iphone", "google-pixel", "man"}
 
 	for _, product := range products {
-
 		ctrl := gomock.NewController(t)
 		defer ctrl.Finish()
 
@@ -85,7 +83,7 @@ func TestBuyItem_UnknownItem(t *testing.T) {
 				Return(user, nil)
 			repoMock.EXPECT().
 				BuyProduct(gomock.Any(), user.ID, product).
-				Return(fmt.Errorf("Bad product"))
+				Return(errors.New("Bad product"))
 
 			j := jwtutil.NewHS256("is-my-private-secret-key-hello-world", "merch", "merch")
 

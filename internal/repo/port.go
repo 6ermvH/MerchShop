@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type MerchRepo interface {
+type MerchRepo interface { //nolint:interfacebloat
 	FindUserByID(ctx context.Context, id uuid.UUID) (model.User, error)
 	FindUserByUsername(ctx context.Context, username string) (model.User, error)
 	CreateUser(ctx context.Context, username, passwordHash string) (model.User, error)
