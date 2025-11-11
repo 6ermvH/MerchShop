@@ -40,12 +40,12 @@ func (api *API) ApiInfoGet(c *gin.Context) {
 		return
 	}
 
-	coinHistoryFrom := make([]openapi.InfoResponseCoinHistoryReceivedInner, 0)
+	coinHistoryTo := make([]openapi.InfoResponseCoinHistorySentInner, 0)
 	for _, rec := range recv {
-		coinHistoryFrom = append(coinHistoryFrom,
-			openapi.InfoResponseCoinHistoryReceivedInner{
-				FromUser: rec.FromUserName,
-				Amount:   int32(rec.Amount), //nolint:gosec
+		coinHistoryTo = append(coinHistoryTo,
+			openapi.InfoResponseCoinHistorySentInner{
+				ToUser: rec.FromUserName,
+				Amount: int32(rec.Amount), //nolint:gosec
 			})
 	}
 
@@ -56,12 +56,12 @@ func (api *API) ApiInfoGet(c *gin.Context) {
 		return
 	}
 
-	coinHistoryTo := make([]openapi.InfoResponseCoinHistorySentInner, 0)
+	coinHistoryFrom := make([]openapi.InfoResponseCoinHistoryReceivedInner, 0)
 	for _, sen := range sent {
-		coinHistoryTo = append(coinHistoryTo,
-			openapi.InfoResponseCoinHistorySentInner{
-				ToUser: sen.ToUserName,
-				Amount: int32(sen.Amount), //nolint:gosec
+		coinHistoryFrom = append(coinHistoryFrom,
+			openapi.InfoResponseCoinHistoryReceivedInner{
+				FromUser: sen.ToUserName,
+				Amount:   int32(sen.Amount), //nolint:gosec
 			})
 	}
 
