@@ -15,13 +15,15 @@ func (r *Repo) CreateOrder(
 	q := r.runner(ctx)
 
 	var o model.Order
-	err := q.QueryRow(ctx, `
-		INSERT INTO merch_shop.orders (user_id, product_id, count)
-		VALUES ($1, $2, $3)
+	if err := q.QueryRow(ctx, `
+		INSERT INTO merch_shop.orders (user_id, product_id)
+		VALUES ($1, $2)
 		RETURNING id, user_id, product_id, created_at
-	`, userId, productId).Scan(&o.ID, &o.UserID, &o.ProductID, &o.CreatedAt)
+	`, userId, productId).Scan(&o.ID, &o.UserID, &o.ProductID, &o.CreatedAt); err != nil {
+		return o, fmt.Errorf("get query row sql: %w", err)
+	}
 
-	return o, fmt.Errorf("get query row sql: %w", err)
+	return o, nil
 }
 
 func (r *Repo) FindOrdersByUserID(ctx context.Context, userId uuid.UUID) ([]model.Order, error) {

@@ -16,13 +16,15 @@ func (r *Repo) CreateTransfer(
 	q := r.runner(ctx)
 
 	var t model.Transfer
-	err := q.QueryRow(ctx, `
+	if err := q.QueryRow(ctx, `
 		INSERT INTO merch_shop.transfers (from_user_id, to_user_id, amount)
 		VALUES ($1, $2, $3)
 		RETURNING id, from_user_id, to_user_id, amount, created_at
-	`, fromID, toID, amount).Scan(&t.ID, &t.FromUserID, &t.ToUserID, &t.Amount, &t.CreatedAt)
+	`, fromID, toID, amount).Scan(&t.ID, &t.FromUserID, &t.ToUserID, &t.Amount, &t.CreatedAt); err != nil {
+		return t, fmt.Errorf("create transfer: %w", err)
+	}
 
-	return t, fmt.Errorf("create transfer: %w", err)
+	return t, nil
 }
 
 func (r *Repo) FindTransfersFromID(ctx context.Context, id uuid.UUID) ([]model.Transfer, error) {
@@ -31,7 +33,7 @@ func (r *Repo) FindTransfersFromID(ctx context.Context, id uuid.UUID) ([]model.T
 	rows, err := q.Query(ctx, `
 		SELECT t.id, t.from_user_id, u.username, t.to_user_id, t.amount, t.created_at
 		FROM merch_shop.transfers AS t
-		JOIN merch_shop.users AS u ON t.from_user_id = u.id
+		JOIN merch_shop.users AS u ON t.to_user_id = u.id
 		WHERE t.from_user_id = $1
 	`, id)
 	if err != nil {
@@ -64,7 +66,7 @@ func (r *Repo) FindTransfersToID(ctx context.Context, id uuid.UUID) ([]model.Tra
 	rows, err := q.Query(ctx, `
 		SELECT t.id, t.from_user_id, t.to_user_id, u.username, t.amount, t.created_at
 		FROM merch_shop.transfers AS t
-		JOIN merch_shop.users AS u ON t.to_user_id = u.id
+		JOIN merch_shop.users AS u ON t.from_user_id = u.id
 		WHERE t.to_user_id = $1
 	`, id)
 	if err != nil {

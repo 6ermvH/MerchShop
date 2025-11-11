@@ -79,25 +79,29 @@ func (r *Repo) AddToBalance(
 	}
 
 	var u model.User
-	err := q.QueryRow(ctx, `
+	if err := q.QueryRow(ctx, `
 		UPDATE merch_shop.users
 		SET balance=$2
 		WHERE id=$1
 		RETURNING id, username, password_hash, balance, created_at
-	`, userId, newBal).Scan(&u.ID, &u.Username, &u.PasswordHash, &u.Balance, &u.CreatedAt)
+	`, userId, newBal).Scan(&u.ID, &u.Username, &u.PasswordHash, &u.Balance, &u.CreatedAt); err != nil {
+		return u, fmt.Errorf("get query row sql: %w", err)
+	}
 
-	return u, fmt.Errorf("get query row sql: %w", err)
+	return u, nil
 }
 
 func (r *Repo) CreateUser(ctx context.Context, username, passwordHash string) (model.User, error) {
 	q := r.runner(ctx)
 
 	var u model.User
-	err := q.QueryRow(ctx, `
+	if err := q.QueryRow(ctx, `
 		INSERT INTO merch_shop.users (username, password_hash)
 		VALUES ($1, $2)
 		RETURNING id, username, password_hash, balance, created_at
-	`, username, passwordHash).Scan(&u.ID, &u.Username, &u.PasswordHash, &u.Balance, &u.CreatedAt)
+	`, username, passwordHash).Scan(&u.ID, &u.Username, &u.PasswordHash, &u.Balance, &u.CreatedAt); err != nil {
+		return u, fmt.Errorf("get query row sql: %w", err)
+	}
 
-	return u, fmt.Errorf("get query row sql: %w", err)
+	return u, nil
 }

@@ -117,5 +117,5 @@ func unauthJSON(c *gin.Context, v any) {
 }
 
 func internal(c *gin.Context) {
-	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "middleware 'db error'"})
 }

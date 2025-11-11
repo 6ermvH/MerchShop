@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -32,7 +33,7 @@ func (api *API) ApiBuyItemGet(c *gin.Context) {
 	defer cancel()
 
 	if err := api.repos.BuyProduct(ctx, user.ID, product); err != nil {
-		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: "db error"})
+		c.JSON(http.StatusInternalServerError, openapi.ErrorResponse{Errors: fmt.Sprintf("db error: %v", err)})
 
 		return
 	}

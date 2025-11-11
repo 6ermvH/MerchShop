@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS merch_shop.transfers (
 
 CREATE TABLE IF NOT EXISTS merch_shop.orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    count INTEGER NOT NULL,
     user_id UUID NOT NULL,
     product_id UUID NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now()
